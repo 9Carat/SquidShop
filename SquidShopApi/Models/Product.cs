@@ -12,13 +12,11 @@ namespace SquidShopApi.Models
 		[StringLength(50)]
 		public string ProductName { get; set; }
 		[Required]
-		[MaxLength(10)]
 		public int InStock { get; set; }
 		[Required]
-		[MaxLength(10)]
 		public double UnitPrice { get; set; }
-		public decimal Discount { get; set; }
-		public double DiscountUnitPrice { get; set; }
+		public decimal Discount { get; set; } = 0;
+		public double DiscountUnitPrice { get; set; } = 0;
 		public string IMG { get; set; }
 		[ForeignKey("Categories")]
 		public int FK_CategoryId { get; set; }

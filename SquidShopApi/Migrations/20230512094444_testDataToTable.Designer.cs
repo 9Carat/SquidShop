@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquidShopApi.Data;
 
@@ -11,9 +12,11 @@ using SquidShopApi.Data;
 namespace SquidShopApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230512094444_testDataToTable")]
+    partial class testDataToTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,6 +150,7 @@ namespace SquidShopApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InStock")
+                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
@@ -155,6 +159,7 @@ namespace SquidShopApi.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("UnitPrice")
+                        .HasMaxLength(10)
                         .HasColumnType("float");
 
                     b.HasKey("ProductId");
