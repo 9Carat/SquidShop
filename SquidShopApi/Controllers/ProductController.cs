@@ -21,15 +21,39 @@ namespace SquidShopApi.Controllers
         }
 		//GET
 		[HttpGet]
-		public async Task<ActionResult <ApiResponse>> GetProducts()
+		public async Task<ActionResult <ApiResponse>> GetProduct()
 		{
 			IEnumerable<Product> products = await _context.GetAllAsync();
 			_response.Result = _mapper.Map<List<ProductDTO>>(products);
 			return Ok(_response);
 		}
 		//GET WITH ID
+		[HttpGet("{id:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<ApiResponse>> GetProduct(int id)
+		{
+			try
+			{
+				if (id == 0)
+				{
+					return BadRequest();
+				}
+				var product = await _context.GetByIdAsync(p => p.ProductId == id);
+				if (product == null)
+				{
+					return NotFound();
+				}
+				_response.Result = _mapper.Map<ProductDTO>(product);
+				return Ok(_response);
+			}
+			catch (Exception)
+			{
 
-
+				throw;
+			}
+		}
 
 		//CREATE/POST
 		[HttpPost]
@@ -46,7 +70,53 @@ namespace SquidShopApi.Controllers
 			Product product = _mapper.Map<Product>(productDTO);
 			await _context.CreateAsync(product);
 			_response.Result = _mapper.Map<ProductDTO>(product);
-			return CreatedAtAction(nameof(GetProducts), new { id = product.ProductId}, _response);
+			return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId}, _response);
+		}
+
+		//UPDATE
+		[HttpPut("{id:int}")]
+		public async Task<ActionResult<ApiResponse>> UpdateProduct(int id, [FromBody] ProductUpdateDTO updateDTO)
+		{
+			try
+			{
+				if (updateDTO == null || id != updateDTO.ProductId)
+				{
+					return BadRequest();
+				}
+				Product product = _mapper.Map<Product>(updateDTO);
+				await _context.UpdateAsync(product);
+				return Ok(_response);
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+		//DELETE
+		[HttpDelete("{id:int}")]
+		public async Task<ActionResult<ApiResponse>> DeleteProduct(int id)
+		{
+			try
+			{
+				if (id == 0)
+				{
+					return BadRequest();
+				}
+				var product = await _context.GetByIdAsync(p => p.ProductId == id);
+				if (product == null)
+				{
+					return NotFound();
+				}
+				await _context.RemoveAsync(product);
+				return Ok(_response);
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
 		}
     }
 }
