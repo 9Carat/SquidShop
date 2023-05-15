@@ -334,7 +334,7 @@ namespace SquidShopWebApp.Data.Migrations
                     b.Property<int>("FK_CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImgURL")
+                    b.Property<string>("ImageName")
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
