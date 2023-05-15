@@ -45,9 +45,10 @@ namespace SquidShopApi.Repository
 			return await temp.FirstOrDefaultAsync();
 		}
 
-		public Task RemoveAsync(T entity)
+		public async Task RemoveAsync(T entity)
 		{
-			throw new NotImplementedException();
+			_db.Remove(entity);
+			await SaveAsync();
 		}
 
 		public async Task SaveAsync()
@@ -55,9 +56,10 @@ namespace SquidShopApi.Repository
 			await _db.SaveChangesAsync();
 		}
 
-		public Task<T> UpdateAsync(T entity)
+		public async Task UpdateAsync(T entity)
 		{
-			throw new NotImplementedException();
+			_db.Update(entity);
+			await SaveAsync();
 		}
 	}
 }

@@ -12,8 +12,8 @@ using SquidShopApi.Data;
 namespace SquidShopApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230512094444_testDataToTable")]
-    partial class testDataToTable
+    [Migration("20230515073805_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,36 +46,6 @@ namespace SquidShopApi.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SquidShopApi.Models.Customer", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("SquidShopApi.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -87,7 +57,7 @@ namespace SquidShopApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FK_CustomerId")
+                    b.Property<int>("FK_UserId")
                         .HasColumnType("int");
 
                     b.Property<bool>("OrderStatus")
@@ -95,7 +65,7 @@ namespace SquidShopApi.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("FK_CustomerId");
+                    b.HasIndex("FK_UserId");
 
                     b.ToTable("Orders");
                 });
@@ -150,7 +120,6 @@ namespace SquidShopApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InStock")
-                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
@@ -159,7 +128,6 @@ namespace SquidShopApi.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("UnitPrice")
-                        .HasMaxLength(10)
                         .HasColumnType("float");
 
                     b.HasKey("ProductId");
@@ -167,41 +135,93 @@ namespace SquidShopApi.Migrations
                     b.HasIndex("FK_CategoryId");
 
                     b.ToTable("Products");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            ProductId = 1,
-                            Discount = 0m,
-                            DiscountUnitPrice = 0.0,
-                            FK_CategoryId = 1,
-                            IMG = "No URL",
-                            InStock = 10,
-                            ProductName = "Jonny Boy",
-                            UnitPrice = 199.0
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            Discount = 0m,
-                            DiscountUnitPrice = 0.0,
-                            FK_CategoryId = 1,
-                            IMG = "No URL",
-                            InStock = 29,
-                            ProductName = "After the laughter comes tears",
-                            UnitPrice = 149.0
-                        });
+            modelBuilder.Entity("SquidShopApi.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SquidShopApi.Models.Order", b =>
                 {
-                    b.HasOne("SquidShopApi.Models.Customer", "Customers")
+                    b.HasOne("SquidShopApi.Models.User", "Users")
                         .WithMany("Orders")
-                        .HasForeignKey("FK_CustomerId")
+                        .HasForeignKey("FK_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customers");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("SquidShopApi.Models.OrderList", b =>
@@ -239,11 +259,6 @@ namespace SquidShopApi.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("SquidShopApi.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("SquidShopApi.Models.Order", b =>
                 {
                     b.Navigation("OrderLists");
@@ -252,6 +267,11 @@ namespace SquidShopApi.Migrations
             modelBuilder.Entity("SquidShopApi.Models.Product", b =>
                 {
                     b.Navigation("OrderLists");
+                });
+
+            modelBuilder.Entity("SquidShopApi.Models.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

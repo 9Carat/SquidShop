@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SquidShopApi.Models
 {
-	public class Customer
+	public class User : IdentityUser
 	{
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

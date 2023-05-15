@@ -8,7 +8,7 @@ namespace SquidShopApi.Repository.IRepository
 		Task<T> GetByIdAsync(Expression<Func<T, bool>> filter = null, bool tracked = true);
 		Task CreateAsync(T entity);
 		Task RemoveAsync(T entity);
-		Task<T> UpdateAsync(T entity);
+		Task UpdateAsync(T entity);
 		Task SaveAsync();
 	}
 }

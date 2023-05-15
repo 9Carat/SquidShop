@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SquidShopApi.Migrations
 {
     /// <inheritdoc />
-    public partial class firstTables : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,17 +29,32 @@ namespace SquidShopApi.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.CustomerId);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,8 +64,8 @@ namespace SquidShopApi.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    InStock = table.Column<int>(type: "int", maxLength: 10, nullable: false),
-                    UnitPrice = table.Column<double>(type: "float", maxLength: 10, nullable: false),
+                    InStock = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<double>(type: "float", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountUnitPrice = table.Column<double>(type: "float", nullable: false),
                     IMG = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -73,8 +88,7 @@ namespace SquidShopApi.Migrations
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FK_CustomerId = table.Column<int>(type: "int", nullable: false),
-                    UsersCustomerId = table.Column<int>(type: "int", nullable: true),
+                    FK_UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -82,10 +96,11 @@ namespace SquidShopApi.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_UsersCustomerId",
-                        column: x => x.UsersCustomerId,
+                        name: "FK_Orders_Users_FK_UserId",
+                        column: x => x.FK_UserId,
                         principalTable: "Users",
-                        principalColumn: "CustomerId");
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -127,9 +142,9 @@ namespace SquidShopApi.Migrations
                 column: "FK_ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_UsersCustomerId",
+                name: "IX_Orders_FK_UserId",
                 table: "Orders",
-                column: "UsersCustomerId");
+                column: "FK_UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_FK_CategoryId",
