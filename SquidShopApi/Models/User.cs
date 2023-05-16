@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SquidShopApi.Models
 {
-	public class User : IdentityUser
+	public class User
 	{
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -17,6 +17,8 @@ namespace SquidShopApi
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 			builder.Services.AddControllers().AddNewtonsoftJson();
 			builder.Services.AddScoped<IRepository<Product>, GenericRepository<Product>>();
+			builder.Services.AddScoped<IRepository<Order>, GenericRepository<Order>>();
+			builder.Services.AddScoped<IRepository<OrderList>, GenericRepository<OrderList>>();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

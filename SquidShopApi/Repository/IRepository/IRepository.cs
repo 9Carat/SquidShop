@@ -9,6 +9,7 @@ namespace SquidShopApi.Repository.IRepository
 		Task CreateAsync(T entity);
 		Task RemoveAsync(T entity);
 		Task UpdateAsync(T entity);
+		Task<T> UpdatePartialAsync(T entity);
 		Task SaveAsync();
 	}
 }
