@@ -15,28 +15,5 @@ namespace SquidShopApi.Data
 		public DbSet<OrderList> OrderLists { get; set; }
 		public DbSet<Product> Products { get; set; }
 		public DbSet<User> Users { get; set; }
-
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<Product>().HasData(
-				new Product()
-				{
-					ProductId = 1,
-					ProductName = "Jonny Boy",
-					InStock = 10,
-					UnitPrice = 199,
-					IMG = "No URL",
-					FK_CategoryId = 1,
-				},
-				new Product()
-				{
-					ProductId = 2,
-					ProductName = "After the laughter comes tears",
-					InStock = 29,
-					UnitPrice = 149,
-					IMG = "No URL",
-					FK_CategoryId = 1,
-				});
-		}
 	}
 }

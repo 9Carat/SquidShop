@@ -5,6 +5,7 @@ using SquidShopApi.Models;
 using SquidShopApi.Repository.IRepository;
 using Azure;
 using Microsoft.AspNetCore.JsonPatch;
+using System.Net;
 
 namespace SquidShopApi.Controllers
 {
@@ -23,11 +24,22 @@ namespace SquidShopApi.Controllers
 		}
 		//GET
 		[HttpGet]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<ActionResult<ApiResponse>> GetOrderList()
 		{
-			IEnumerable<OrderList> orders = await _context.GetAllAsync();
-			_response.Result = _mapper.Map<List<OrderListDTO>>(orders);
-			return Ok(_response);
+			try
+			{
+				IEnumerable<OrderList> orders = await _context.GetAllAsync();
+				_response.Result = _mapper.Map<List<OrderListDTO>>(orders);
+				_response.StatusCode = HttpStatusCode.OK;
+				return Ok(_response);
+			}
+			catch (Exception ex)
+			{
+				_response.IsSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
 		}
 		//GET WITH ID
 		[HttpGet("{id:int}")]
@@ -40,40 +52,60 @@ namespace SquidShopApi.Controllers
 			{
 				if (id == 0)
 				{
+					_response.StatusCode = HttpStatusCode.BadRequest;
 					return BadRequest();
 				}
 				var orders = await _context.GetByIdAsync(p => p.FK_OrderId == id);
 				if (orders == null)
 				{
+					_response.StatusCode = HttpStatusCode.NotFound;
 					return NotFound();
 				}
 				_response.Result = _mapper.Map<OrderListDTO>(orders);
+				_response.StatusCode = HttpStatusCode.OK;	
 				return Ok(_response);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-
-				throw;
+				_response.IsSuccess = false;
+				_response.ErrorMessages = new List<string>() { ex.ToString() };
 			}
+			return _response;
 		}
 		//CREATE/POST
 		[HttpPost]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<ActionResult<ApiResponse>> AddOrderList([FromBody] OrderListDTO orderListDTO)
 		{
-			if (orderListDTO == null)
+			try
 			{
-				return BadRequest(orderListDTO);
+				if (orderListDTO == null)
+				{
+					return BadRequest(orderListDTO);
+				}
+				OrderList orders = _mapper.Map<OrderList>(orderListDTO);
+				await _context.CreateAsync(orders);
+				_response.Result = _mapper.Map<OrderListDTO>(orders);
+				_response.StatusCode = HttpStatusCode.Created;
+				return CreatedAtAction(nameof(GetOrderList), new { id = orders.OrderListId }, _response);
 			}
-			OrderList orders = _mapper.Map<OrderList>(orderListDTO);
-			await _context.CreateAsync(orders);
-			_response.Result = _mapper.Map<OrderListDTO>(orders);
-			return CreatedAtAction(nameof(GetOrderList), new { id = orders.OrderListId }, _response);
+			catch (Exception ex)
+			{
+				_response.IsSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
 		}
 
 		//PATCH
-		[HttpPatch("{id:int}")] //fixa mot user sen också
+		[HttpPatch("{id:int}")] //fixa mot user sen också?
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> UpdatePartialOrderList(int id, JsonPatchDocument<OrderListUpdateDTO> patchDTO)
 		{
+
 			if (patchDTO == null || id == 0)
 			{
 				return BadRequest();

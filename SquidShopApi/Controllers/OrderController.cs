@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SquidShopApi.Models;
 using SquidShopApi.Models.DTO;
 using SquidShopApi.Repository.IRepository;
+using System.Net;
 
 namespace SquidShopApi.Controllers
 {
@@ -21,11 +22,22 @@ namespace SquidShopApi.Controllers
 		}
 		//GET
 		[HttpGet]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<ActionResult<ApiResponse>> GetOrder()
 		{
-			IEnumerable<Order> products = await _context.GetAllAsync();
-			_response.Result = _mapper.Map<List<OrderDTO>>(products);
-			return Ok(_response);
+			try
+			{
+				IEnumerable<Order> products = await _context.GetAllAsync();
+				_response.Result = _mapper.Map<List<OrderDTO>>(products);
+				_response.StatusCode = HttpStatusCode.OK;
+				return Ok(_response);
+			}
+			catch (Exception ex)
+			{
+				_response.IsSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
 		}
 		//GET WITH ID
 		[HttpGet("{id:int}")]
@@ -38,38 +50,55 @@ namespace SquidShopApi.Controllers
 			{
 				if (id == 0)
 				{
-					return BadRequest();
+					_response.StatusCode = HttpStatusCode.BadRequest;
+					return BadRequest(_response);
 				}
 				var product = await _context.GetByIdAsync(p => p.OrderId == id);
 				if (product == null)
 				{
-					return NotFound();
+					_response.StatusCode = HttpStatusCode.NotFound;
+					return NotFound(_response);
 				}
 				_response.Result = _mapper.Map<OrderDTO>(product);
+				_response.StatusCode = HttpStatusCode.OK;
 				return Ok(_response);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-
-				throw;
+				_response.IsSuccess = false;
+				_response.ErrorMessages = new List<string>() { ex.ToString() };
 			}
+			return _response;
 		}
 		//CREATE/POST
 		[HttpPost]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<ActionResult<ApiResponse>> AddOrder([FromBody] OrderDTO orderDTO)
 		{
-			if (await _context.GetByIdAsync(o => o.OrderId == orderDTO.OrderId) != null)
+			try
 			{
-				return BadRequest(ModelState);
+				if (await _context.GetByIdAsync(o => o.OrderId == orderDTO.OrderId) != null)
+				{
+					return BadRequest(ModelState);
+				}
+				if (orderDTO == null)
+				{
+					return BadRequest(orderDTO);
+				}
+				Order order = _mapper.Map<Order>(orderDTO);
+				await _context.CreateAsync(order);
+				_response.Result = _mapper.Map<OrderDTO>(order);
+				_response.StatusCode = HttpStatusCode.OK;
+				return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, _response);
 			}
-			if (orderDTO == null)
+			catch (Exception ex)
 			{
-				return BadRequest(orderDTO);
+				_response.IsSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
 			}
-			Order order = _mapper.Map<Order>(orderDTO);
-			await _context.CreateAsync(order);
-			_response.Result = _mapper.Map<OrderDTO>(order);
-			return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, _response);
+			return _response;
 		}
 	}
 }
