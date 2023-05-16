@@ -17,6 +17,15 @@ namespace SquidShopWebApp.Data
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
+			builder.Entity<Category>()
+				.HasData(
+					new Category()
+					{
+						CategoryId = 1,
+						Name = "Food",
+						Details = "Food from all over the world",
+					});
+
 			builder.Entity<Product>()
 				.HasOne(p => p.Categories)
 				.WithMany(c => c.Products)
