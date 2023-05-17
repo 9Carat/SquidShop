@@ -37,6 +37,29 @@ namespace SquidShopApi.Data
 					IMG = "No URL",
 					FK_CategoryId = 1,
 				});
+			modelBuilder.Entity<Category>().HasData(
+				new Category()
+				{
+					CategoryId = 1,
+					CategoryName = "Toys",
+					Details = "Play things"
+				},
+				new Category()
+				{
+					CategoryId = 2,
+					CategoryName = "Tools",
+					Details = "Work things"
+				});
+			modelBuilder.Entity<User>().HasData(
+				new User()
+				{
+					UserId = 1,
+					FirstName = "Sven",
+					LastName = "Knutsson",
+					Address = "Forest",
+					PostalCode = "20211",
+					City = "There"
+				});
 		}
 	}
 }
