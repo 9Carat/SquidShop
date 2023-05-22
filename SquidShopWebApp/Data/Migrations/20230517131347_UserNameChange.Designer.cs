@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquidShopWebApp.Data;
 
@@ -11,9 +12,11 @@ using SquidShopWebApp.Data;
 namespace SquidShopWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230517131347_UserNameChange")]
+    partial class UserNameChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,6 +275,9 @@ namespace SquidShopWebApp.Data.Migrations
                     b.Property<string>("FK_UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -360,26 +366,6 @@ namespace SquidShopWebApp.Data.Migrations
             modelBuilder.Entity("SquidShopWebApp.Models.Customer", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
