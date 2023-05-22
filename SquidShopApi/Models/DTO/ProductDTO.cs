@@ -5,6 +5,7 @@ namespace SquidShopApi.Models.DTO
 {
 	public class ProductDTO
 	{
+		public int ProductId { get; set; }
 		public string ProductName { get; set; }
 		public int InStock { get; set; }
 		public double UnitPrice { get; set; }

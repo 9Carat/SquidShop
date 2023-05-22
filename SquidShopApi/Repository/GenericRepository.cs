@@ -61,5 +61,12 @@ namespace SquidShopApi.Repository
 			_db.Update(entity);
 			await SaveAsync();
 		}
+
+		public async Task<T> UpdatePartialAsync(T entity)
+		{
+			_db.Update(entity);
+			await SaveAsync();
+			return entity;
+		}
 	}
 }

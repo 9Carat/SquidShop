@@ -21,6 +21,8 @@ namespace SquidShopApi
 			builder.Services.AddScoped<IRepository<Category>, GenericRepository<Category>>();
 			builder.Services.AddScoped<IRepository<User>, GenericRepository<User>>();
 			builder.Services.AddScoped<IRepository<IdentityUser>, GenericRepository<IdentityUser>>();
+			builder.Services.AddScoped<IRepository<Order>, GenericRepository<Order>>();
+			builder.Services.AddScoped<IRepository<OrderList>, GenericRepository<OrderList>>();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

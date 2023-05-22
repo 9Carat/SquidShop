@@ -65,7 +65,7 @@ namespace SquidShopWebApp.Data.Migrations
                     UnitPrice = table.Column<double>(type: "float", nullable: false),
                     Discount = table.Column<bool>(type: "bit", nullable: false),
                     DiscountPrice = table.Column<double>(type: "float", nullable: false),
-                    ImgURL = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
+                    ImageName = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
                     FK_CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
