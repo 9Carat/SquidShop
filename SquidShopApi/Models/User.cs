@@ -17,6 +17,5 @@ namespace SquidShopApi.Models
         public string PostalCode { get; set; }
         public string City { get; set; }
         public ICollection<Order> Orders { get; set; }
-
     }
 }
