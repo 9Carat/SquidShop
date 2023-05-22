@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SquidShopWebApp.Data;
+using SquidShopWebApp.Services;
+using SquidShopWebApp.Services.IServices;
 
 namespace SquidShopWebApp
 {
@@ -19,6 +21,8 @@ namespace SquidShopWebApp
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
+			builder.Services.AddHttpClient<IProductService, ProductService>();
+			builder.Services.AddScoped<IProductService, ProductService>();
 
 			var app = builder.Build();
 

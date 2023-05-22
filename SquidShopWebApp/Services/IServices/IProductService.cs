@@ -1,0 +1,11 @@
+﻿namespace SquidShopWebApp.Services.IServices
+{
+	public interface IProductService
+	{
+		Task<T> GetAllAsync<T>();
+		Task<T> GetByIdAsync<T>(int id);
+		Task<T> CreateAsync<T>(T entity);
+		Task<T> UpdateAsync<T>(T entity);
+		Task<T> DeleteAsync<T>(int id);
+	}
+}
