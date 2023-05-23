@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SquidShopWebApp.API;
 using SquidShopWebApp.Data;
 using SquidShopWebApp.Models;
 
@@ -40,12 +41,21 @@ namespace SquidShopWebApp.Controllers
             var order = await _context.Orders
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
+            var orderList = await _context.OrderLists.Where(ol => ol.Fk_OrderId == id).FirstOrDefaultAsync();
+            var product = await _context.Products.Where(p => p.ProductId == orderList.FK_ProductId).FirstOrDefaultAsync();
+                
             if (order == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            // Anropar API för uträkning av distans
+            var ApiResponse = new DistanceApi();
+            var result = await ApiResponse.Get(order.ShippingAddress);
+
+            var viewModel = new OrderViewModel() { Order = order, Product = product, OrderList = orderList, ApiResponse = result};
+
+            return View(viewModel);
         }
 
         // GET: Orders/Create
