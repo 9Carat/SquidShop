@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SquidShopWebApp.Data;
 using SquidShopWebApp.Models;
+
 
 namespace SquidShopWebApp.Controllers
 {
@@ -63,15 +65,19 @@ namespace SquidShopWebApp.Controllers
             {
                 _context.Add(promotion);
                 await _context.SaveChangesAsync();
+
                 var product = await _context.Products.FindAsync(promotion.ProductId);
                 if (product != null)
                 {
                     double discountPrice = product.UnitPrice * (1 - promotion.DiscountProcent / 100);
                     product.DiscountPrice = discountPrice;
+                    product.Discount = true;
+                    product.UnitPrice = discountPrice;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));
+               
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", promotion.ProductId);
             return View(promotion);

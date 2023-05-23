@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SquidShopWebApp.Models.Product>
+﻿
+@model IEnumerable<SquidShopWebApp.Models.Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,7 +23,9 @@
                     double discountPrice = item.UnitPrice * (1 - item.Promotion.DiscountProcent / 100);
                     <p class="oldPrice">@item.UnitPrice</p>
                     <p>@discountPrice</p>
-                    <p class="text-success">@((1 - item.Promotion.DiscountProcent / 100) * 100)% Off!</p>
+                   <p class="text-success">@((1 - item.Promotion.DiscountProcent / 100) * 100)% Off!</p>
+
+                  
                 }
                 else
                 {
@@ -31,8 +34,10 @@
 
                 @if (item.Promotion != null && item.Promotion.DiscountProcent > 0)
                 {
+                    // Visa det nya priset om det finns en rabatt
                     double discountPrice = item.UnitPrice * (1 - item.Promotion.DiscountProcent / 100);
                     <p>New Price: <span>@discountPrice</span></p>
+                    <p>Kampanj:</p> 
                 }
             </div>
             <div>
