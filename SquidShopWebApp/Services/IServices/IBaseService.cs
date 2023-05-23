@@ -6,6 +6,6 @@ namespace SquidShopWebApp.Services.IServices
 	public interface IBaseService
 	{
 		ApiResponse response { get; set; }
-		Task<T> SendSync<T>(ApiRequest apiRequest);
+		Task<T> SendAsync<T>(ApiRequest apiRequest);
 	}
 }

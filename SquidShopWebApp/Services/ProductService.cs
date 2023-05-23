@@ -1,4 +1,6 @@
-﻿using SquidShopWebApp.Services.IServices;
+﻿using SquidShopWebApp.Models;
+using SquidShopWebApp.Models.DTO;
+using SquidShopWebApp.Services.IServices;
 
 namespace SquidShopWebApp.Services
 {
@@ -11,19 +13,28 @@ namespace SquidShopWebApp.Services
 			this._productUrl = configuration.GetValue<string>("ServiceUrls:SquidShopApi");
 		}
 
-		public Task<T> CreateAsync<T>(T entity)
+		public Task<T> CreateAsync<T>(ProductCreateDTO dto)
 		{
-			throw new NotImplementedException();
+			return SendAsync<T>(apiRequest: new ApiRequest()
+			{
+				ApiType = Utility.SD.ApiType.POST,
+				Data = dto,
+				ApiUrl = this._productUrl + "/product"
+			});
 		}
 
 		public Task<T> DeleteAsync<T>(int id)
 		{
-			throw new NotImplementedException();
+			return SendAsync<T>(apiRequest: new ApiRequest()
+			{
+				ApiType= Utility.SD.ApiType.DELETE,
+				ApiUrl = this._productUrl + "/product/" + id
+			});
 		}
 
 		public Task<T> GetAllAsync<T>()
 		{
-			return SendAsync<T>(apiRequest: new Models.ApiRequest()
+			return SendAsync<T>(apiRequest: new ApiRequest()
 			{
 				ApiType = Utility.SD.ApiType.GET,
 				ApiUrl = this._productUrl + "/product"
@@ -32,12 +43,21 @@ namespace SquidShopWebApp.Services
 
 		public Task<T> GetByIdAsync<T>(int id)
 		{
-			throw new NotImplementedException();
+			return SendAsync<T>(apiRequest: new ApiRequest()
+			{
+				ApiType = Utility.SD.ApiType.GET,
+				ApiUrl = this._productUrl + "/product/" + id
+			});
 		}
 
-		public Task<T> UpdateAsync<T>(T entity)
+		public Task<T> UpdateAsync<T>(ProductUpdateDTO dto)
 		{
-			throw new NotImplementedException();
+			return SendAsync<T>(apiRequest: new ApiRequest()
+			{
+				ApiType = Utility.SD.ApiType.PUT,
+				Data = dto,
+				ApiUrl = this._productUrl + "/product/" + dto.ProductId
+			});
 		}
 	}
 }

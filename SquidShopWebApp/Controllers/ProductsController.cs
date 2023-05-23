@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SquidShopWebApp.Data;
 using SquidShopWebApp.Models;
+using SquidShopWebApp.Models.DTO;
 using SquidShopWebApp.Services.IServices;
 
 namespace SquidShopWebApp.Controllers
@@ -22,7 +23,7 @@ namespace SquidShopWebApp.Controllers
         {
             _productService = productService;
         }
-
+        //GET
         public async Task<IActionResult> Index()
         {
             List<Product> list = new();
@@ -33,6 +34,28 @@ namespace SquidShopWebApp.Controllers
             }
             return View(list);
         }
+		//GET POST
+		public IActionResult Create()
+        {
+            //add viewbag when CategoriesService is done
+			return View();
+        }
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ProductCreateDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _productService.CreateAsync<ApiResponse>(model);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            return View(model); 
+        }
+
         //    private readonly ApplicationDbContext _context;
         //    private readonly IWebHostEnvironment _hostEnvironment;
 

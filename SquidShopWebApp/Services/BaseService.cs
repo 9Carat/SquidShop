@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using SquidShopWebApp.Models;
+using SquidShopWebApp.Services.IServices;
 using System.Text;
 
 namespace SquidShopWebApp.Services
 {
-	public class BaseService
+	public class BaseService : IBaseService
 	{
         public ApiResponse response { get; set; }
         public IHttpClientFactory httpClient { get; set; }
@@ -63,5 +64,5 @@ namespace SquidShopWebApp.Services
                 return apiResponse;
             }
         }
-    }
+	}
 }

@@ -21,6 +21,7 @@ namespace SquidShopWebApp
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
+			builder.Services.AddAutoMapper(typeof(MappingConfig));
 			builder.Services.AddHttpClient<IProductService, ProductService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
 
