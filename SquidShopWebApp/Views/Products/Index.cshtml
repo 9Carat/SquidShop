@@ -36,8 +36,8 @@
                 {
                     // Visa det nya priset om det finns en rabatt
                     double discountPrice = item.UnitPrice * (1 - item.Promotion.DiscountProcent / 100);
-                    <p>New Price: <span>@discountPrice</span></p>
-                    <p>Kampanj:</p> 
+                    string message = "Rabatterat pris för:" + discountPrice;
+                   
                 }
             </div>
             <div>

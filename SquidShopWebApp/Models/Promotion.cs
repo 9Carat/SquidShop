@@ -11,5 +11,8 @@ namespace SquidShopWebApp.Models
         [ForeignKey("ProductId")]
         public int ProductId { get; set; }
         public Product Product { get; set; }
+
+        [NotMapped]
+        public string ProductName => Product?.ProductName;
     }
 }

@@ -12,19 +12,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountProcent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th></th>
+            <th scope="col">Start date</th>
+            <th scope="col">End date</th>
+            <th scope="col">Discount Percentege</th>
+            <th scope="col">ProductId</th>
+            <th scope="col">Product name</th>
         </tr>
     </thead>
     <tbody>
@@ -37,10 +29,13 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DiscountProcent)
+                @Html.DisplayFor(modelItem => item.DiscountProcent)%
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.ProductId)
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PromotionId">Edit</a> |

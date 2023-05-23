@@ -75,6 +75,7 @@ namespace SquidShopWebApp.Controllers
                     product.UnitPrice = discountPrice;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+
                 }
                 return RedirectToAction(nameof(Index));
                
