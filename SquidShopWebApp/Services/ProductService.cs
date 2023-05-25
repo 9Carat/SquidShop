@@ -1,6 +1,7 @@
 ﻿using SquidShopWebApp.Models;
 using SquidShopWebApp.Models.DTO;
 using SquidShopWebApp.Services.IServices;
+using SquidShopWebApp.Utility;
 
 namespace SquidShopWebApp.Services
 {
@@ -17,7 +18,7 @@ namespace SquidShopWebApp.Services
 		{
 			return SendAsync<T>(apiRequest: new ApiRequest()
 			{
-				ApiType = Utility.SD.ApiType.POST,
+				ApiType = SD.ApiType.POST,
 				Data = dto,
 				ApiUrl = this._productUrl + "/product"
 			});
@@ -27,7 +28,7 @@ namespace SquidShopWebApp.Services
 		{
 			return SendAsync<T>(apiRequest: new ApiRequest()
 			{
-				ApiType= Utility.SD.ApiType.DELETE,
+				ApiType= SD.ApiType.DELETE,
 				ApiUrl = this._productUrl + "/product/" + id
 			});
 		}
@@ -36,16 +37,15 @@ namespace SquidShopWebApp.Services
 		{
 			return SendAsync<T>(apiRequest: new ApiRequest()
 			{
-				ApiType = Utility.SD.ApiType.GET,
+				ApiType = SD.ApiType.GET,
 				ApiUrl = this._productUrl + "/product"
 			});
 		}
-
 		public Task<T> GetByIdAsync<T>(int id)
 		{
 			return SendAsync<T>(apiRequest: new ApiRequest()
 			{
-				ApiType = Utility.SD.ApiType.GET,
+				ApiType = SD.ApiType.GET,
 				ApiUrl = this._productUrl + "/product/" + id
 			});
 		}
@@ -54,10 +54,14 @@ namespace SquidShopWebApp.Services
 		{
 			return SendAsync<T>(apiRequest: new ApiRequest()
 			{
-				ApiType = Utility.SD.ApiType.PUT,
+				ApiType = SD.ApiType.PUT,
 				Data = dto,
 				ApiUrl = this._productUrl + "/product/" + dto.ProductId
 			});
+		}
+		public Task<T> GetList<T>()
+		{
+			return SendAsync<T>(apiRequest: new ApiRequest() { ApiType = SD.ApiType.GET, ApiUrl = this._productUrl + "/category" });
 		}
 	}
 }

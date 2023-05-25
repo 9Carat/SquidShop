@@ -9,5 +9,6 @@ namespace SquidShopWebApp.Services.IServices
 		Task<T> CreateAsync<T>(ProductCreateDTO dto);
 		Task<T> UpdateAsync<T>(ProductUpdateDTO dto);
 		Task<T> DeleteAsync<T>(int id);
+		Task<T> GetList<T>();
 	}
 }

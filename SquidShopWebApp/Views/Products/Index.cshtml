@@ -17,11 +17,11 @@
             <p>@item.ProductName</p>
             <img class="prodImg" src="@("~/images/" + item.ImageName)" asp-append-version="true" />
             <div>
-                Price: @if (@item.Discount)
+                Price: @if (@item.Discount != 0)
                 {
                     <p class="oldPrice">@item.UnitPrice</p>
-                    <p>@item.DiscountPrice</p>
-                    <p class="text-success">@((1 - item.DiscountPrice / item.UnitPrice) * 100)% Off!</p>
+                    <p>@item.DiscountUnitPrice</p>
+                    <p class="text-success">@((1 - item.DiscountUnitPrice / item.UnitPrice) * 100)% Off!</p>
                 }
                 else
                 {
