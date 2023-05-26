@@ -21,9 +21,9 @@
                 {
                     <p class="oldPrice">@item.UnitPrice</p>
 
-
-
-                    <p class="text-success">@item.DiscountUnitPrice / @(item.Discount * 100)% Off!</p>
+                    @item.DiscountUnitPrice
+                    
+                    <p class="text-success">@(item.Discount * 100)% Off!</p>
                 }
                 else
                 {
