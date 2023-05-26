@@ -20,8 +20,10 @@
                 Price: @if (@item.Discount != 0)
                 {
                     <p class="oldPrice">@item.UnitPrice</p>
-                    <p>@item.DiscountUnitPrice</p>
-                    <p class="text-success">@((1 - item.DiscountUnitPrice / item.UnitPrice) * 100)% Off!</p>
+
+
+
+                    <p class="text-success">@item.DiscountUnitPrice / @(item.Discount * 100)% Off!</p>
                 }
                 else
                 {
@@ -29,9 +31,9 @@
                 }
             </div>
             <div>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                <a asp-controller="Products" asp-action="DeleteProduct" asp-route-productId="@item.ProductId">Delete</a>
             </div>
         </div>
     }

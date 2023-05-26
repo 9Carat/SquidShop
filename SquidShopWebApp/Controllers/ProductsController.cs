@@ -46,7 +46,7 @@ namespace SquidShopWebApp.Controllers
         //GET POST
         public IActionResult Create()
 		{
-            //   ViewBag.Category = PopulateDropDown<Category>().GetAwaiter().GetResult();
+            ViewBag.Category = PopulateDropDown<Category>().GetAwaiter().GetResult();
 			return View();
         }
         //POST CREATE
@@ -67,6 +67,7 @@ namespace SquidShopWebApp.Controllers
         //GET UPDATE
         public async Task<IActionResult> UpdateProduct(int productId)
         {
+            ViewBag.Category = PopulateDropDown<Category>().GetAwaiter().GetResult();
             var response = await _productService.GetByIdAsync<ApiResponse>(productId);
             if (response != null && response.IsSuccess)
             {
@@ -82,6 +83,12 @@ namespace SquidShopWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.Discount != 0)
+                {
+                    var discount = Decimal.ToDouble(model.Discount);
+                    var discountPrice = model.UnitPrice * (1 - discount);
+                    model.DiscountUnitPrice = double.Floor(discountPrice);
+                }
                 var response = await _productService.UpdateAsync<ApiResponse>(model);
                 if (response != null && response.IsSuccess)
                 {

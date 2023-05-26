@@ -9,6 +9,7 @@ namespace SquidShopWebApp
         public MappingConfig()
         {
 			CreateMap<Product, ProductCreateDTO>().ReverseMap();
+			CreateMap<Product, ProductUpdateDTO>().ReverseMap();
 
 		}
     }
