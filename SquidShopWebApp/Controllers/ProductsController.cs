@@ -29,6 +29,13 @@ namespace SquidShopWebApp.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public IActionResult BuyProduct(int id)
+        {
+            var productViewModel = new ProductViewModel();
+            productViewModel.ProductId = id;
+            return View(productViewModel);
+        }
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {

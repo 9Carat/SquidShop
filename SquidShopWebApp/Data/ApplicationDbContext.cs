@@ -14,7 +14,11 @@ namespace SquidShopWebApp.Data
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<OrderList> OrderLists { get; set; }
 		public DbSet<Category> Categories { get; set; }
-        public DbSet<Promotion> Promotions { get; set; }
+
+    public DbSet<Promotion> Promotions { get; set; }
+
+		public DbSet<Customer> Customers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
 		{
