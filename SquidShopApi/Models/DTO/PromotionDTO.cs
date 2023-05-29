@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SquidShopWebApp.Models
+namespace SquidShopApi.Models.DTO
 {
-    public class Promotion
+    public class PromotionDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PromotionId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

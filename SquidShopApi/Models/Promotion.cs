@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SquidShopApi.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SquidShopWebApp.Models
+namespace SquidShopApi.Models
 {
     public class Promotion
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PromotionId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
