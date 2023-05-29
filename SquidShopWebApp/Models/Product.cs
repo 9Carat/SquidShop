@@ -16,9 +16,9 @@ namespace SquidShopWebApp.Models
         [StringLength(75)]
         [DisplayName("Image Name")]
         public string ImageName { get; set; }
-        //[NotMapped]
-        //[DisplayName("Upload Image")]
-        //public IFormFile ImageFile { get; set; }
+        [NotMapped]
+        [DisplayName("Upload Image")]
+        public IFormFile ImageFile { get; set; }
         public int FK_CategoryId { get; set; }
         public Category Categories { get; set; }
         public ICollection<OrderList> OrderLists { get; set; }

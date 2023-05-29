@@ -31,9 +31,9 @@
                 }
             </div>
             <div>
-                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-                <a asp-controller="Products" asp-action="DeleteProduct" asp-route-productId="@item.ProductId">Delete</a>
+                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                @*<a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info"><i class="bi bi-card-text"></i></a>*@
+                <a asp-controller="Products" asp-action="DeleteProduct" asp-route-productId="@item.ProductId" class="btn btn-danger"><i class="bi bi-x-square"></i></a>
             </div>
         </div>
     }

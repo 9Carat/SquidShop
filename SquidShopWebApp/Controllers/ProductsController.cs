@@ -19,10 +19,12 @@ namespace SquidShopWebApp.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMapper _mapper;
-        public ProductsController(IProductService productService, IMapper mapper)
+        public ProductsController(IProductService productService, IWebHostEnvironment webHostEnvironment, IMapper mapper)
         {
             _productService = productService;
+            _webHostEnvironment = webHostEnvironment;
             _mapper = mapper;
         }
         //GET
@@ -56,6 +58,23 @@ namespace SquidShopWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Sparar bild i wwwroot/images med unikt filnamn
+                string rootPath = _webHostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(model.ImageFile.FileName);
+                string extenstion = Path.GetExtension(model.ImageFile.FileName);
+                fileName = fileName + DateTime.Now.ToString("yymmssfff") + extenstion;
+                model.ImageName = fileName;
+                string path = Path.Combine(rootPath + "/Images", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await model.ImageFile.CopyToAsync(fileStream);
+                }
+                if (model.Discount != 0)
+                {
+                    var discount = Decimal.ToDouble(model.Discount);
+                    var discountPrice = model.UnitPrice * (1 - discount);
+                    model.DiscountUnitPrice = double.Floor(discountPrice);
+                }
                 var response = await _productService.CreateAsync<ApiResponse>(model);
                 if (response != null && response.IsSuccess)
                 {
@@ -113,6 +132,16 @@ namespace SquidShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProduct(Product model)
         {
+            var imageResponse = await _productService.GetByIdAsync<ApiResponse>(model.ProductId);
+            if (imageResponse != null && imageResponse.IsSuccess)
+            {
+                Product imageModel = JsonConvert.DeserializeObject<Product>(Convert.ToString(imageResponse.Result));
+                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageModel.ImageName);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
             var response = await _productService.DeleteAsync<ApiResponse>(model.ProductId);
             if (response != null && response.IsSuccess)
             {
