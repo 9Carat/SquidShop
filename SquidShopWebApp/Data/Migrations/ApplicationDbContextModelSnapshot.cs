@@ -414,7 +414,7 @@ namespace SquidShopWebApp.Data.Migrations
                         .HasColumnType("nvarchar(6)");
 
                     b.HasDiscriminator().HasValue("Customer");
-                }));
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
