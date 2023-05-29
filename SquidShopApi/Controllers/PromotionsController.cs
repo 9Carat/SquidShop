@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SquidShopApi.Data;
 using SquidShopApi.Models;
 using SquidShopApi.Models.DTO;
-using SquidShopApi.Repository;
 using SquidShopApi.Repository.IRepository;
 
 
