@@ -14,13 +14,23 @@ namespace SquidShopWebApp.Services
             this._orderUrl = configuration.GetValue<string>("ServiceUrls:SquidShopApi");
         }
 
-        public Task<T> CreateAsync<T>(OrderCreateDTO dto)
+        public Task<T> CreateOrderAsync<T>(OrderCreateDTO dto)
         {
             return SendAsync<T>(apiRequest: new ApiRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
                 ApiUrl = this._orderUrl + "/order"
+            });
+        }
+
+        public Task<T> CreateOrderListAsync<T>(OrderListCreateDTO dto)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = dto,
+                ApiUrl = this._orderUrl + "/orderlist"
             });
         }
 
@@ -41,7 +51,7 @@ namespace SquidShopWebApp.Services
                 ApiUrl = this._orderUrl + "/order"
             });
         }
-        public Task<T> GetByIdAsync<T>(int id)
+        public Task<T> GetOrderByIdAsync<T>(int id)
         {
             return SendAsync<T>(apiRequest: new ApiRequest()
             {
@@ -50,13 +60,31 @@ namespace SquidShopWebApp.Services
             });
         }
 
-        public Task<T> UpdateAsync<T>(OrderUpdateDTO dto)
+        public Task<T> GetProductByIdAsync<T>(int id)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._orderUrl + "/product/" + id
+            });
+        }
+
+        public Task<T> UpdateOrderAsync<T>(OrderUpdateDTO dto)
         {
             return SendAsync<T>(apiRequest: new ApiRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
                 ApiUrl = this._orderUrl + "/order/" + dto.OrderId
+            });
+        }
+        public Task<T> UpdateProductAsync<T>(ProductUpdateDTO dto)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.PUT,
+                Data = dto,
+                ApiUrl = this._orderUrl + "/product/" + dto.ProductId
             });
         }
     }

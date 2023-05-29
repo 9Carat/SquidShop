@@ -13,15 +13,11 @@ namespace SquidShopWebApp.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
-        private readonly IOrderListService _orderListService;
-        private readonly IProductService _productService;
         private readonly IMapper _mapper;
-        public OrdersController(IOrderService orderService, IMapper mapper, IProductService productService, IOrderListService orderListService)
+        public OrdersController(IOrderService orderService, IMapper mapper)
         {
             _orderService = orderService;
             _mapper = mapper;
-            _productService = productService;
-            _orderListService = orderListService;
         }
         //Get Index
         public async Task<IActionResult> Index()
@@ -52,7 +48,8 @@ namespace SquidShopWebApp.Controllers
                 // Bör förmodligen läggas upp på ett smidigare sätt :)
 
                 //var user = await _userManager.GetUserAsync(User);
-                var product = await _productService.GetByIdAsync<Product>(viewModel.ProductId);
+                var response = await _orderService.GetProductByIdAsync<ApiResponse>(viewModel.ProductId);
+                var product = JsonConvert.DeserializeObject<Product>(Convert.ToString(response.Result));
                 var order = new Order();
                 var orderList = new OrderList();
                 order.FK_UserId = viewModel.UserId; 
@@ -60,7 +57,8 @@ namespace SquidShopWebApp.Controllers
                 order.OrderStatus = true;
                 order.ShippingAddress = viewModel.ShippingAddress;
                 var newOrder = _mapper.Map<OrderCreateDTO>(order);
-                await _orderService.CreateAsync<ApiResponse>(newOrder);
+                await _orderService.CreateOrderAsync<ApiResponse>(newOrder);
+                //return RedirectToAction("CreateOrderList", "OrderLists", viewModel);
                 orderList.Fk_OrderId = order.OrderId;
                 orderList.FK_ProductId = product.ProductId;
                 orderList.Quantity = (int)viewModel.Quantity;
@@ -73,10 +71,10 @@ namespace SquidShopWebApp.Controllers
                     orderList.Price = (double)(product.DiscountUnitPrice * (int)viewModel.Quantity);
                 }
                 product.InStock -= (int)viewModel.Quantity;
-                var newOrderList = _mapper.Map<OrderListCreateDTO>(orderList);
-                await _orderListService.CreateAsync<ApiResponse>(newOrderList);
                 var productUpdate = _mapper.Map<ProductUpdateDTO>(product);
-                await _productService.UpdateAsync<ApiResponse>(productUpdate);
+                await _orderService.UpdateProductAsync<ApiResponse>(productUpdate);
+                var newOrderList = _mapper.Map<OrderListCreateDTO>(orderList);
+                await _orderService.CreateOrderListAsync<ApiResponse>(newOrderList);
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
