@@ -24,6 +24,12 @@ namespace SquidShopWebApp
 			builder.Services.AddAutoMapper(typeof(MappingConfig));
 			builder.Services.AddHttpClient<IProductService, ProductService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddHttpClient<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddHttpClient<IOrderService, OrderService>();
+			builder.Services.AddScoped<IOrderService, OrderService>();            
+			builder.Services.AddHttpClient<IOrderListService, OrderListService>();
+			builder.Services.AddScoped<IOrderListService, OrderListService>();
 
 			var app = builder.Build();
 
