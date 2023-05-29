@@ -21,7 +21,6 @@ namespace SquidShopWebApp.Models
         public IFormFile ImageFile { get; set; }
         public int FK_CategoryId { get; set; }
         public Category Categories { get; set; }
-        public Promotion Promotion { get; set; }
         public ICollection<OrderList> OrderLists { get; set; }
     }
 }
