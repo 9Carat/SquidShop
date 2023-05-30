@@ -23,6 +23,5 @@ namespace SquidShopApi.Models
         public string City { get; set; }
         public string FK_UsersId { get; set; }
         public ICollection<Order> Orders { get; set; }
-
     }
 }
