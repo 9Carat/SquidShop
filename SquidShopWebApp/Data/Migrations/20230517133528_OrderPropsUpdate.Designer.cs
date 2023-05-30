@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquidShopWebApp.Data;
 
@@ -11,9 +12,11 @@ using SquidShopWebApp.Data;
 namespace SquidShopWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230517133528_OrderPropsUpdate")]
+    partial class OrderPropsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -357,36 +360,7 @@ namespace SquidShopWebApp.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("SquidShopWebApp.Models.Promotion", b =>
-                {
-                    b.Property<int>("PromotionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromotionId"));
-
-                    b.Property<double>("DiscountProcent")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("PromotionId");
-
-                    b.HasIndex("ProductId")
-                        .IsUnique();
-
-                    b.ToTable("Promotions");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.User", b =>
-
+            modelBuilder.Entity("SquidShopWebApp.Models.Customer", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -503,17 +477,6 @@ namespace SquidShopWebApp.Data.Migrations
                     b.Navigation("Categories");
                 });
 
-            modelBuilder.Entity("SquidShopWebApp.Models.Promotion", b =>
-                {
-                    b.HasOne("SquidShopWebApp.Models.Product", "Product")
-                        .WithOne("Promotion")
-                        .HasForeignKey("SquidShopWebApp.Models.Promotion", "ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("SquidShopWebApp.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -527,8 +490,6 @@ namespace SquidShopWebApp.Data.Migrations
             modelBuilder.Entity("SquidShopWebApp.Models.Product", b =>
                 {
                     b.Navigation("OrderLists");
-
-                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("SquidShopWebApp.Models.Customer", b =>
