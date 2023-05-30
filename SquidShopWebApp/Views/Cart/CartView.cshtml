@@ -1,0 +1,20 @@
+﻿@model SquidShopWebApp.Models.Cart
+
+@foreach (var item in Model.CartItems)
+{
+    <div>
+        <h4>@item.Product.ProductName</h4>
+        <p>Price: $@item.Price</p>
+        <p>Quantity: @item.Quantity</p>
+        <p>Total: $@(item.Price * item.Quantity)</p>
+        <form action="@Url.Action("UpdateQuantity", "Cart")" method="post">
+            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+            <input type="number" name="quantity" value="@item.Quantity" />
+            <input type="submit" value="Update" />
+        </form>
+        <form action="@Url.Action("RemoveFromCart", "Cart")" method="post">
+            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+            <input type="submit" value="Remove" />
+        </form>
+    </div>
+}

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<SquidShopWebApp.Models.Order>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<div class="container p-4 border">
+    <div>
+        <a asp-controller="User" asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i></a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Users)</th>
+                <th>
+                    @Html.DisplayNameFor(model=> model.CreatedAt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.Address)
+                </th>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Quantity
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Users.FirstName
+                        @item.Users.LastName
+                    </td>
+                    <td>
+                        @item.CreatedAt
+                    </td>
+                    <td>
+                        @item.OrderStatus
+                    </td>
+                    <td>
+                        @item.Users.Address
+                        @item.Users.PostalCode
+                        @item.Users.City
+                    </td>
+                    @foreach (var oLitem in item.OrderLists)
+                    {
+                        <td>
+                            @oLitem.Products.ProductName
+                        </td>
+                        <td>
+                            @oLitem.Price
+                        </td>
+                        <td>
+                            @oLitem.Quantity
+                        </td>   
+                    }
+                    @*<td>
+                <td>
+                <a asp-controller="User" asp-action="Update" asp-route-interestId="@item.UserId" class="btn btn-outline-success"><i class="bi bi-pencil-square"></i></a>
+                <a asp-controller="User" asp-action="Delete" asp-route-interestId="@item.UserId" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></a>
+                </td>
+                </td>*@
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
