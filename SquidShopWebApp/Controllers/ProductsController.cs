@@ -110,6 +110,32 @@ namespace SquidShopWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.ImageFile != null)
+                {
+                    string rootPath = _webHostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(model.ImageFile.FileName);
+                    string extenstion = Path.GetExtension(model.ImageFile.FileName);
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extenstion;
+                    model.ImageName = fileName;
+                    string path = Path.Combine(rootPath + "/Images", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+                var imageResponse = await _productService.GetByIdAsync<ApiResponse>(model.ProductId);
+                if (imageResponse != null && imageResponse.IsSuccess)
+                {
+                    Product imageModel = JsonConvert.DeserializeObject<Product>(Convert.ToString(imageResponse.Result));
+                    if (model.ImageName != imageModel.ImageName)
+                    {
+                        var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageModel.ImageName);
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                    }
+                }
                 if (model.Discount != 0)
                 {
                     var discount = Decimal.ToDouble(model.Discount);
