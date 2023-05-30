@@ -43,12 +43,28 @@ namespace SquidShopWebApp.Services
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllOrdersAsync<T>()
         {
             return SendAsync<T>(apiRequest: new ApiRequest()
             {
                 ApiType = SD.ApiType.GET,
                 ApiUrl = this._orderUrl + "/order"
+            });
+        }
+        public Task<T> GetAllOrderListsAsync<T>()
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._orderUrl + "/orderlist"
+            });
+        }
+        public Task<T> GetAllProductsAsync<T>()
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._orderUrl + "/product"
             });
         }
         public Task<T> GetOrderByIdAsync<T>(int id)
@@ -66,6 +82,15 @@ namespace SquidShopWebApp.Services
             {
                 ApiType = SD.ApiType.GET,
                 ApiUrl = this._orderUrl + "/product/" + id
+            });
+        }
+
+        public Task<T> GetOrderListByIdAsync<T>(int id)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._orderUrl + "/orderlist/" + id
             });
         }
 

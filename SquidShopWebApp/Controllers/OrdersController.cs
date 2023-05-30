@@ -7,6 +7,7 @@ using SquidShopWebApp.Models.DTO;
 using SquidShopWebApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SquidShopWebApp.API;
 
 namespace SquidShopWebApp.Controllers
 {
@@ -23,7 +24,7 @@ namespace SquidShopWebApp.Controllers
         public async Task<IActionResult> Index()
         {
             List<Order> list = new();
-            var response = await _orderService.GetAllAsync<ApiResponse>();
+            var response = await _orderService.GetAllOrdersAsync<ApiResponse>();
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<Order>>(Convert.ToString(response.Result));
@@ -50,16 +51,15 @@ namespace SquidShopWebApp.Controllers
                 //var user = await _userManager.GetUserAsync(User);
                 var response = await _orderService.GetProductByIdAsync<ApiResponse>(viewModel.ProductId);
                 var product = JsonConvert.DeserializeObject<Product>(Convert.ToString(response.Result));
-                var order = new Order();
-                var orderList = new OrderList();
+                var order = new OrderCreateDTO();
+                var orderList = new OrderListCreateDTO();
                 order.FK_UserId = viewModel.UserId; 
                 order.CreatedAt = DateTime.Now;
                 order.OrderStatus = true;
                 order.ShippingAddress = viewModel.ShippingAddress;
-                var newOrder = _mapper.Map<OrderCreateDTO>(order);
-                await _orderService.CreateOrderAsync<ApiResponse>(newOrder);
-                //return RedirectToAction("CreateOrderList", "OrderLists", viewModel);
-                orderList.Fk_OrderId = order.OrderId;
+                var newOrder = await _orderService.CreateOrderAsync<ApiResponse>(order);
+                var orderInfo = JsonConvert.DeserializeObject<Order>(Convert.ToString(newOrder.Result));
+                orderList.Fk_OrderId = orderInfo.OrderId;
                 orderList.FK_ProductId = product.ProductId;
                 orderList.Quantity = (int)viewModel.Quantity;
                 if (product.Discount == 0)
@@ -78,6 +78,47 @@ namespace SquidShopWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Orders/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            // Hämtar order
+            var orderResponse = await _orderService.GetOrderByIdAsync<ApiResponse>((int)id);
+            var orderInfo = JsonConvert.DeserializeObject<Order>(Convert.ToString(orderResponse.Result));
+
+            if (orderInfo == null || id == null)
+            {
+                return NotFound();
+            }
+
+            // Hämtar orderList och product
+            List<OrderList> orderListList = new();
+            var orderListResponse = await _orderService.GetAllOrderListsAsync<ApiResponse>();
+            if (orderListResponse != null && orderListResponse.IsSuccess)
+            {
+                orderListList = JsonConvert.DeserializeObject<List<OrderList>>(Convert.ToString(orderListResponse.Result));
+            }
+            List<Product> productList = new();
+            var ProductListResponse = await _orderService.GetAllProductsAsync<ApiResponse>();
+            if (ProductListResponse != null && ProductListResponse.IsSuccess)
+            {
+                productList = JsonConvert.DeserializeObject<List<Product>>(Convert.ToString(ProductListResponse.Result));
+            }
+
+            // Matchar orderList och product med order
+            var orderlist = orderListList.Where(o => o.Fk_OrderId == id).FirstOrDefault();
+            var productId = orderlist.FK_ProductId;
+            var product = productList.Where(p => p.ProductId == productId).FirstOrDefault();
+
+
+            //Anropar API för uträkning av distans
+            var ApiResponse = new DistanceApi();
+            var result = await ApiResponse.Get(orderInfo.ShippingAddress);
+
+            var viewModel = new OrderViewModel() { Order = orderInfo, Product = product, OrderList = orderlist, ApiResponse = result };
+
+            return View(viewModel);
         }
     }
 }

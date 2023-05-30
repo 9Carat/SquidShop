@@ -51,34 +51,6 @@ namespace SquidShopWebApp.Controllers
             productViewModel.ProductId = id;
             return View(productViewModel);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateStock(ProductViewModel viewModel)
-        //{
-        //    var response = await _productService.GetByIdAsync<ApiResponse>(viewModel.ProductId);
-        //    if (response != null && response.IsSuccess)
-        //    {
-        //        var product = JsonConvert.DeserializeObject<Product>(Convert.ToString(response.Result));
-        //        product.InStock -= (int)viewModel.Quantity;
-        //        var productUpdate = _mapper.Map<ProductUpdateDTO>(product);
-        //        await _productService.UpdateAsync<ApiResponse>(productUpdate);
-        //        return RedirectToAction("CreateOrder", "Orders", viewModel);
-        //    }
-        //    return RedirectToAction(nameof(Index));
-
-            //if (ViewModel.Product.Discount == 0)
-            //{
-            //    ViewModel.Price = ViewModel.Product.UnitPrice * Convert.ToDouble(ViewModel.Quantity);
-            //}
-            //else
-            //{
-            //    ViewModel.Price = (double)(ViewModel.Product.DiscountUnitPrice * (int)ViewModel.Quantity);
-            //}
-            //var product = ViewModel.Product;
-            //product.InStock -= (int)ViewModel.Quantity;
-            //var productUpdate = _mapper.Map<ProductUpdateDTO>(product);
-            //await _productService.UpdateAsync<ApiResponse>(productUpdate);
-            //return RedirectToAction("CreateOrder", "Orders", ViewModel);
-        //}
 
         //GET POST
         public IActionResult Create()
