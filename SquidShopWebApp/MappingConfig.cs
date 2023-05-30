@@ -10,7 +10,9 @@ namespace SquidShopWebApp
         {
 			CreateMap<Product, ProductCreateDTO>().ReverseMap();
 			CreateMap<Product, ProductUpdateDTO>().ReverseMap();
-
-		}
+            CreateMap<Order, OrderCreateDTO>().ReverseMap();
+            CreateMap<Order, OrderUpdateDTO>().ReverseMap();
+            CreateMap<OrderList, OrderListCreateDTO>().ReverseMap();
+        }
     }
 }

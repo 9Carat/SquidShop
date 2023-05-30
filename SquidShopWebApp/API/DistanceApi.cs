@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
-using System.Web.Http;
 
 namespace SquidShopWebApp.API
 {
