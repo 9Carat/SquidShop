@@ -45,6 +45,14 @@ namespace SquidShopWebApp.Controllers
             var entities = JsonConvert.DeserializeObject<List<Category>>(Convert.ToString(response.Result));
             return new SelectList(entities, "CategoryId", "CategoryName");
         }
+        
+        public IActionResult BuyProduct(int id)
+        {
+            var productViewModel = new ProductViewModel();
+            productViewModel.ProductId = id;
+            return View(productViewModel);
+        }
+        
         //GET POST
         public IActionResult Create()
 		{

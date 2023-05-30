@@ -1,18 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SquidShopApi.Models
+namespace SquidShopApi.Models.DTO
 {
-	public class User
-	{
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
-        [Required]
+    public class UserDTO
+    {
         [StringLength(50)]
         public string FirstName { get; set; }
-        [Required]
         [StringLength(50)]
         public string LastName { get; set; }
         [StringLength(70)]
@@ -22,6 +16,6 @@ namespace SquidShopApi.Models
         [StringLength(50)]
         public string City { get; set; }
         public string FK_UsersId { get; set; }
-        public ICollection<Order> Orders { get; set; }
+
     }
 }
