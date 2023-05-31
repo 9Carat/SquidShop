@@ -13,27 +13,28 @@
 <div class="row">
     @foreach(var item in Model)
     {
-        <div class="col-md-2 border border-primary rounded mx-2">
+        <div class="card mx-2 my-2" style="width: 15rem">
             <p>@item.ProductName</p>
-            <img class="prodImg" src="@("~/images/" + item.ImageName)" asp-append-version="true" />
-            <div>
+            <img class="prodImg align-self-center" src="@("~/images/" + item.ImageName)" asp-append-version="true" />
+            <div class="card-body">
                 Price: @if (@item.Discount != 0)
                 {
-                    <p class="oldPrice">@item.UnitPrice</p>
-                    <p>@item.DiscountUnitPrice</p>
-                    <p class="text-success">@((1 - item.DiscountUnitPrice / item.UnitPrice) * 100)% Off!</p>
+                    <div><span class="oldPrice">@item.UnitPrice</span> @item.DiscountUnitPrice</div>
+                    <p class="text-success">@(item.Discount * 100)% Off!</p>
                 }
                 else
                 {
                     @item.UnitPrice
                 }
+                <p>In stock: @item.InStock</p>
             </div>
-            <div>
+            <div class="card-footer text-body-secondary">
                 <a asp-action="BuyProduct" asp-route-id="@item.ProductId">Buy</a>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> 
+                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId">Edit</a>
                 <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                <a asp-action="DeleteProduct" asp-route-productId="@item.ProductId">Delete</a>
             </div>
         </div>
     }
 </div>
+@*class="col-md-2 border border-primary rounded mx-2"*@
