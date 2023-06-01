@@ -1,0 +1,49 @@
+﻿@model IEnumerable<StatisticsViewModel>
+@{
+    ViewData["Title"] = "Index";
+    int quantity = 0;
+    double price = 0;
+    string name = "";
+    int stock = 0;
+
+    @foreach (var item in Model)
+    {
+        name = item.Product.ProductName;
+        quantity += item.OrderList.Quantity;
+        price += item.OrderList.Price;
+        stock = item.Product.InStock;
+    }
+}
+
+<h1>Product overview</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>In stock</th>
+            <th>Price total</th>
+            <th>Quantity total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@name</td>
+            @if (stock < 10)
+            {
+                <td class="text-danger">@stock</td>
+            }
+            else
+            {
+                <td>@stock</td>
+
+            }
+            <td>@price</td>
+            <td>@quantity</td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back</a>
+</div>
