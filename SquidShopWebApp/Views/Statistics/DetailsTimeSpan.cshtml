@@ -2,20 +2,20 @@
 @{
     ViewData["Title"] = "Index";
     int quantity = 0;
+    int productQuantity = 0;
     double price = 0;
+    double productPrice = 0;
+
 }
 
 <h1>Statistics overview</h1>
 
 <table class="table">
     <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Product.ProductName)</th>
-            <th>@Html.DisplayNameFor(model => model.Order.CreatedAt)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderList.Price)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderList.Quantity)</th>
-            <th></th>
-        </tr>
+    <th>@Html.DisplayNameFor(model => model.Product.ProductName)</th>
+    <th>@Html.DisplayNameFor(model => model.Order.CreatedAt)</th>
+    <th>@Html.DisplayNameFor(model => model.OrderList.Price)</th>
+    <th>@Html.DisplayNameFor(model => model.OrderList.Quantity)</th>
     </thead>
     <tbody>
         @foreach (var item in Model)
@@ -27,9 +27,6 @@
                 <td>@Html.DisplayFor(modelItem => item.Order.CreatedAt)</td>
                 <td>@Html.DisplayFor(modelItem => item.OrderList.Price)</td>
                 <td>@Html.DisplayFor(modelItem => item.OrderList.Quantity)</td>
-                <td>
-                    <a asp-action="ProductDetails" asp-route-id="@item.Product.ProductId">More info</a>
-                </td>
             </tr>
         }
     </tbody>
@@ -55,5 +52,6 @@
 </table>
 
 <div>
-    <a asp-action="Details">Select time span</a>
+    <a asp-action="Index">Back</a>
+    <a asp-action="ProductDetails">Show product overview</a>
 </div>
