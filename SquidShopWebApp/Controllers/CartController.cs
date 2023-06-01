@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using SquidShopWebApp.Data;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SquidShopWebApp.Controllers
 {
@@ -24,13 +27,16 @@ namespace SquidShopWebApp.Controllers
             _user = user;
             _db = db;
         }
-        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        public async Task<IActionResult> AddToCart(int productId)
         {
+            int quantity = 1;
+
             var userId = await _user.GetUserAsync(User);
             
             Cart cart = GetCart(userId.Id);
 
-            CartItem existingCartItem = cart.CartItems.FirstOrDefault(item => item.ProductId == productId);
+            
+            CartItem existingCartItem = cart.CartItems.FirstOrDefault(item => item.Fk_ProductId == productId);
             if (existingCartItem != null)
             {   
                 existingCartItem.Quantity += quantity;
@@ -39,17 +45,20 @@ namespace SquidShopWebApp.Controllers
             {
                 var response = await _productService.GetByIdAsync<ApiResponse>(productId);
                 Product product = JsonConvert.DeserializeObject<Product>(Convert.ToString(response.Result));
-                CartItem newCartItem = new CartItem
+                CartItem cartItem = new()
                 {
-                    ProductId = productId,
+                    Fk_ProductId = productId,
                     Quantity = quantity,
-                    Price = product.UnitPrice,
-                    Cart = cart,
-                    Product = product
+                    UnitPrice = product.UnitPrice,
+                    Discount = product.Discount,
+                    DiscountUnitPrice = product.DiscountUnitPrice,
+                    Fk_CartId = cart.CartId,
+                    ProductName = product.ProductName,
+                    ImageName = product.ImageName,
                 };
-                cart.CartItems.Add(newCartItem);
+                await _db.CartItems.AddAsync(cartItem);
             }
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return RedirectToAction("CartView");
         }
 
@@ -75,6 +84,10 @@ namespace SquidShopWebApp.Controllers
                 cartItem.Quantity = quantity;
                 _db.SaveChanges();
             }
+            if (cartItem.Quantity == 0) 
+            {
+                _db.CartItems.Remove(cartItem);
+            }
 
             return RedirectToAction("CartView");
         }
@@ -83,7 +96,6 @@ namespace SquidShopWebApp.Controllers
         {
             
             var userId = await _user.GetUserAsync(User);
-
             
             Cart cart = GetCart(userId.Id);
 
@@ -92,7 +104,7 @@ namespace SquidShopWebApp.Controllers
 
         private Cart GetCart(string userId)
         {
-            Cart cart = _db.Carts.FirstOrDefault(c => c.UserId == userId);
+            Cart cart = _db.Carts.Include(i=>i.CartItems).FirstOrDefault(c => c.UserId == userId);
 
           
             if (cart == null)
@@ -100,7 +112,6 @@ namespace SquidShopWebApp.Controllers
                 cart = new Cart
                 {
                     UserId = userId,
-                    CartItems = new List<CartItem>()
                 };
                 _db.Carts.Add(cart);
                 _db.SaveChanges();

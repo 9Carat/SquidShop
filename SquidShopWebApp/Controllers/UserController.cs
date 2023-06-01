@@ -51,9 +51,10 @@ namespace SquidShopWebApp.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> Update(int interestid)
+        public async Task<IActionResult> Update(int id)
         {
-            var response = await _userService.GetByIdAsync<ApiResponse>(interestid);
+            int a = 2;
+            var response = await _userService.GetByIdAsync<ApiResponse>(a);
             if (response != null && response.IsSuccess)
             {
                 User model = JsonConvert.DeserializeObject<User>(Convert.ToString(response.Result));

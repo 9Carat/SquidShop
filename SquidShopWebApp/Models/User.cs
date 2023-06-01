@@ -4,6 +4,7 @@ namespace SquidShopWebApp.Models
 {
 	public class User
 	{
+        [Required]
         public int UserId { get; set; }
         [StringLength(50)]
         public string FirstName { get; set; }

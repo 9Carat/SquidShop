@@ -1,20 +1,40 @@
 ﻿@model SquidShopWebApp.Models.Cart
 
-@foreach (var item in Model.CartItems)
+@if (Model.CartItems.Count != 0)
 {
+    @foreach (var item in Model.CartItems)
+    {
+        <div>
+            <h4>@item.ProductName</h4>
+            <img class="prodImg" src="@("~/images/" + item.ImageName)" asp-append-version="true" />
+            @if (item.Discount != 0)
+            {
+                <p>Price: @item.DiscountUnitPrice</p>
+                <p>Quantity: @item.Quantity</p>
+                <p class="text-success">Discount: @((item.UnitPrice - item.DiscountUnitPrice) * item.Quantity)</p>
+                <p>Total: @(item.DiscountUnitPrice * item.Quantity)</p>
+            }
+            else
+            {
+                <p>Price: @item.UnitPrice</p>
+                <p>Quantity: @item.Quantity</p>
+                <p>Total: @(item.UnitPrice * item.Quantity)</p>
+            }
+            <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
+                <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                <input type="number" name="quantity" value="@item.Quantity" />
+                <input type="submit" value="Update" />
+            </form>
+            <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                <input type="submit" value="Remove" />
+            </form>
+        </div>
+    <hr />
+    }
+}
+else {
     <div>
-        <h4>@item.Product.ProductName</h4>
-        <p>Price: $@item.Price</p>
-        <p>Quantity: @item.Quantity</p>
-        <p>Total: $@(item.Price * item.Quantity)</p>
-        <form action="@Url.Action("UpdateQuantity", "Cart")" method="post">
-            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-            <input type="number" name="quantity" value="@item.Quantity" />
-            <input type="submit" value="Update" />
-        </form>
-        <form action="@Url.Action("RemoveFromCart", "Cart")" method="post">
-            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-            <input type="submit" value="Remove" />
-        </form>
+        <h4>Your cart is empty</h4>
     </div>
 }

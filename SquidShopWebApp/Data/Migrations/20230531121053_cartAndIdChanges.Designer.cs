@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquidShopWebApp.Data;
 
@@ -11,9 +12,11 @@ using SquidShopWebApp.Data;
 namespace SquidShopWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531121053_cartAndIdChanges")]
+    partial class cartAndIdChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,9 +253,6 @@ namespace SquidShopWebApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
 
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
@@ -265,15 +265,6 @@ namespace SquidShopWebApp.Data.Migrations
                     b.Property<int>("Fk_ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageName")
-                        .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -282,9 +273,44 @@ namespace SquidShopWebApp.Data.Migrations
 
                     b.HasKey("CartItemId");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("Fk_CartId");
+
+                    b.HasIndex("Fk_ProductId");
 
                     b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("SquidShopWebApp.Models.ProductViewModel", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double>("DiscountUnitPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
+
+                    b.Property<string>("ProductName")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("ProductId");
+
+                    b.ToTable("ProductViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -340,9 +366,21 @@ namespace SquidShopWebApp.Data.Migrations
 
             modelBuilder.Entity("SquidShopWebApp.Models.CartItem", b =>
                 {
-                    b.HasOne("SquidShopWebApp.Models.Cart", null)
+                    b.HasOne("SquidShopWebApp.Models.Cart", "Cart")
                         .WithMany("CartItems")
-                        .HasForeignKey("CartId");
+                        .HasForeignKey("Fk_CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SquidShopWebApp.Models.ProductViewModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("Fk_ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SquidShopWebApp.Models.Cart", b =>
