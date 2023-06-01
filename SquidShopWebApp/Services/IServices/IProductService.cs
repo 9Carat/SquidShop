@@ -1,4 +1,6 @@
-﻿using SquidShopWebApp.Models.DTO;
+﻿using SquidShopWebApp.Models;
+using SquidShopWebApp.Models.DTO;
+using System.Collections;
 
 namespace SquidShopWebApp.Services.IServices
 {
@@ -10,5 +12,6 @@ namespace SquidShopWebApp.Services.IServices
 		Task<T> UpdateAsync<T>(ProductUpdateDTO dto);
 		Task<T> DeleteAsync<T>(int id);
 		Task<T> GetList<T>();
-	}
+        Task<List<Product>> GetAllProducts();
+    }
 }

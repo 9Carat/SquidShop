@@ -28,6 +28,11 @@ namespace SquidShopWebApp
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddHttpClient<IOrderListService, OrderListService>();
             builder.Services.AddScoped<IOrderListService, OrderListService>();
+            builder.Services.AddHttpClient<IPromotionService, PromotionService>();
+            builder.Services.AddScoped<IPromotionService, PromotionService>();
+           
+
+
 
             var app = builder.Build();
 

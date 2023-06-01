@@ -11,7 +11,8 @@ namespace SquidShopWebApp.Models
         public string ProductName { get; set; }
         public int InStock { get; set; }
         public double UnitPrice { get; set; }
-        public decimal Discount { get; set; }
+        public bool Discount { get; set; } = false;
+        public decimal DiscountPrice { get; set; }
         public double DiscountUnitPrice { get; set; }
         [StringLength(75)]
         [DisplayName("Image Name")]

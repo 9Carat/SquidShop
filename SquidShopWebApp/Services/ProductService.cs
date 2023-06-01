@@ -2,6 +2,7 @@
 using SquidShopWebApp.Models.DTO;
 using SquidShopWebApp.Services.IServices;
 using SquidShopWebApp.Utility;
+using System.Collections;
 
 namespace SquidShopWebApp.Services
 {
@@ -63,5 +64,16 @@ namespace SquidShopWebApp.Services
 		{
 			return SendAsync<T>(apiRequest: new ApiRequest() { ApiType = SD.ApiType.GET, ApiUrl = this._productUrl + "/category" });
 		}
-	}
+
+        async Task<List<Product>> IProductService.GetAllProducts()
+        {
+            var productList = await SendAsync<List<Product>>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._productUrl + "/product"
+            });
+
+            return productList;
+        }
+    }
 }
