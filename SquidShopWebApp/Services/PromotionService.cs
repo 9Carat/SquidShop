@@ -27,7 +27,7 @@ namespace SquidShopWebApp.Services
                 ApiUrl = this._promotionUrl + "/promotion"
             });
         }
-        
+        //ADD
         public Task<T>GetAllAsync<T>()
         {
             return SendAsync<T>(apiRequest: new ApiRequest()
