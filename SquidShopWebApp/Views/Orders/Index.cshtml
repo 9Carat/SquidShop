@@ -1,26 +1,32 @@
 ﻿@model IEnumerable<Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Orders";
 }
 
-<h1>Index</h1>
 
-<p>
+
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 
-<div class="row">
+<div class="accordation accordion-flush" id="accordionFlushExample">
+    <h1>Orders</h1>
     @foreach (var item in Model)
     {
-        <div class="col-md-2 border border-primary rounded mx-2">
-            <p>@item.OrderStatus</p>
-            <p>@item.CreatedAt</p>
-            <p>@item.ShippingAddress</p>
-            <div>
-                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.OrderId">Details</a>
-                <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+        <div class="accordation-item border-bottom">
+            <h2 class="accordation header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@item.OrderId" aria-expanded="false" aria-controls="flush-@item.OrderId">
+                    <p>@item.CreatedAt</p>
+                </button>
+            </h2>
+            <div id="flush-@item.OrderId" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <p><strong>Shipping adress:</strong> @item.ShippingAddress</p><br>
+                    <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.OrderId">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+                </div>
             </div>
         </div>
     }
