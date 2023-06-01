@@ -106,7 +106,6 @@ namespace SquidShopWebApp.Controllers
         {
             Cart cart = _db.Carts.Include(i=>i.CartItems).FirstOrDefault(c => c.UserId == userId);
 
-          
             if (cart == null)
             {
                 cart = new Cart
@@ -116,7 +115,6 @@ namespace SquidShopWebApp.Controllers
                 _db.Carts.Add(cart);
                 _db.SaveChanges();
             }
-
             return cart;
         }
     }
