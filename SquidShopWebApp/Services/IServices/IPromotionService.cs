@@ -1,4 +1,5 @@
 ﻿using SquidShopWebApp.Models;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace SquidShopWebApp.Services.IServices
@@ -13,5 +14,10 @@ namespace SquidShopWebApp.Services.IServices
         bool Any(Func<object, bool> value);
         IQueryable<Promotion> GetPromotionsIncludingProducts();
         IQueryable<Product> GetProductsIncludingProducts();
+
+        Task<T> GetAllAsync<T>(Product product);
+        Task<T> GetByIdAsync<T>(int id);
+        
+        Task SaveChangesAsync();
     }
 }

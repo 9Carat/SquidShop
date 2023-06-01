@@ -19,14 +19,10 @@ namespace SquidShopWebApp.Controllers
     {
         private readonly IPromotionService _promotionService;
 
-        private readonly ApplicationDbContext _context;
-        private readonly IProductService _productService;
-
-
         public PromotionsController(IPromotionService promotionService, IProductService productService)
         {
             _promotionService = promotionService;
-            _productService = productService;
+
             //_context = context;
         }
 
@@ -65,140 +61,149 @@ namespace SquidShopWebApp.Controllers
         // GET: Promotions/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["ProductId"] = new SelectList(await _productService.GetAllProducts(), "ProductId", "ProductId");
-            return View();
-        }
-
-        // POST: Promotions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PromotionId,StartDate,EndDate,DiscountProcent,ProductId")] Promotion promotion)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(promotion);
-                await _context.SaveChangesAsync();
-
-                var product = await _productService.GetByIdAsync<Product>(promotion.ProductId);
-                if (product != null)
-                {
-                    double discountPrice = product.UnitPrice * (1 - promotion.DiscountProcent / 100);
-                    product.DiscountPrice = (decimal)discountPrice;
-                    product.Discount = true;
-                    product.UnitPrice = discountPrice;
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-
-                }
-                return RedirectToAction(nameof(Index));
-
-            }
-            var products = await _productService.GetAllProducts();
-            ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
-            return View(promotion);
-        }
-
-        // GET: Promotions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _productService == null)/////jsdnfojsdnåpf
+            var promotions = await _promotionService.GetAllAsync<IEnumerable<Promotion>>();
+            if (promotions == null)
             {
                 return NotFound();
             }
-
-            var promotion = await _productService.GetByIdAsync<Product>((int)id);
-            if (promotion == null)
+            var productIds = promotions.Select(p => p.ProductId).ToList();
+            ViewData["ProductId"] = new SelectList(productIds, "ProductId", "ProductId");
             {
-                return NotFound();
+                return View();
             }
-            var products = await _productService.GetAllProducts();
-            ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
-            return View(promotion);
         }
 
-        // POST: Promotions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PromotionId,StartDate,EndDate,DiscountProcent,ProductId")] Promotion promotion)
-        {
-            if (id != promotion.PromotionId)
+            // POST: Promotions/Create
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create([Bind("PromotionId,StartDate,EndDate,DiscountProcent,ProductId")] Promotion promotion)
             {
-                return NotFound();
-            }
+                if (ModelState.IsValid)
+                {
+                    await _promotionService.CreateAsync<Promotion>(promotion);
+                    await _promotionService.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(promotion);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PromotionExists(promotion.PromotionId))
+                    var product = await _promotionService.GetByIdAsync<Product>(promotion.ProductId);
+                    if (product != null)
                     {
-                        return NotFound();
+                        double discountPrice = product.UnitPrice * (1 - promotion.DiscountProcent / 100);
+                        product.DiscountPrice = (decimal)discountPrice;
+                        product.Discount = true;
+                        product.UnitPrice = discountPrice;
+                        await _promotionService.UpdateAsync<Product>(promotion);
+                        await _promotionService.SaveChangesAsync();
+
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    return RedirectToAction(nameof(Index));
+
                 }
+                var products = await _promotionService.GetAllAsync<IEnumerable<Product>>();
+                ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
+                return View(promotion);
+            }
+
+            //// GET: Promotions/Edit/5
+            //async Task<IActionResult> Edit(int? id)
+            //{
+            //    if (id == null || _promotionService == null)/////jsdnfojsdnåpf
+            //    {
+            //        return NotFound();
+            //    }
+
+            //    var promotion = await _promotionService.GetByIdAsync<Product>((int)id);
+            //    if (promotion == null)
+            //    {
+            //        return NotFound();
+            //    }
+            //    var products = await _promotionService.GetAllAsync<IEnumerable<Product>>();
+            //    ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
+            //    return View(promotion);
+            //}
+
+            // POST: Promotions/Edit/5
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            async Task<IActionResult> Edit(int id, [Bind("PromotionId,StartDate,EndDate,DiscountProcent,ProductId")] Promotion promotion)
+            {
+                if (id != promotion.PromotionId)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        await _promotionService.UpdateAsync<Promotion>(promotion);
+                        await _promotionService.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!PromotionExists(promotion.PromotionId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                var promotions = await _promotionService.GetAllAsync<IEnumerable<Promotion>>();
+                ViewData["ProductId"] = new SelectList(promotions, "ProductId", "ProductId", promotion.ProductId);
+                return View(promotion);
+            }
+
+            // GET: Promotions/Delete/5
+            async Task<IActionResult> Delete(int? id)
+            {
+                if (id == null || _promotionService == null)
+                {
+                    return NotFound();
+                }
+
+                var promotion = await _promotionService
+                .GetPromotionsIncludingProducts()
+                .FirstOrDefaultAsync(m => m.PromotionId == id);
+                if (promotion == null)
+                {
+                    return NotFound();
+                }
+
+                return View(promotion);
+            }
+
+            // POST: Promotions/Delete/5
+            [HttpPost, ActionName("Delete")]
+            [ValidateAntiForgeryToken]
+            async Task<IActionResult> DeleteConfirmed(int id)
+            {
+
+                if (_promotionService == null)
+                {
+                    return Problem("Entity set 'ApplicationDbContext.Promotions'  is null.");
+                }
+
+                var promotion = await _promotionService.GetByIdAsync<Promotion>(id);
+                if (promotion != null)
+                {
+                    await _promotionService.DeleteAsync<ApiResponse>(promotion);
+
+                }
+
+                await _promotionService.GetAllAsync<IEnumerable<Promotion>>(); // Ange typargumentet explicit som IEnumerable<Promotion>
                 return RedirectToAction(nameof(Index));
             }
-            var products = await _productService.GetAllProducts();
-            ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
-            return View(promotion);
-        }
 
-        // GET: Promotions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _promotionService == null)
+            bool PromotionExists(int id)
             {
-                return NotFound();
+                return _promotionService.Any(e => ((Promotion)e).PromotionId == id);
             }
-
-            var promotion = await _promotionService
-            .GetPromotionsIncludingProducts()
-            .FirstOrDefaultAsync(m => m.PromotionId == id);
-            if (promotion == null)
-            {
-                return NotFound();
-            }
-
-            return View(promotion);
-        }
-
-        // POST: Promotions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-
-            if (_promotionService == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Promotions'  is null.");
-            }
-
-            var promotion = await _promotionService.GetByIdAsync<Promotion>(id);
-            if (promotion != null)
-            {
-                await _promotionService.DeleteAsync<ApiResponse>(promotion);
-
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PromotionExists(int id)
-        {
-            return _promotionService.Any(e => ((Promotion)e).PromotionId == id);
         }
     }
-}
+
