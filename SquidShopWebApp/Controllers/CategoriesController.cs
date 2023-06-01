@@ -22,7 +22,7 @@ namespace SquidShopWebApp.Controllers
             _categoryService = categoryService;
         }
         //INDEX GET
-        public async Task<IActionResult> CategoryIndex()
+        public async Task<IActionResult> Index()
         {
             List<Category> list = new();
             var response = await _categoryService.GetAllAsync<ApiResponse>();
