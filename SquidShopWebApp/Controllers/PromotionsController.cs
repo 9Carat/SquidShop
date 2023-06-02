@@ -19,7 +19,7 @@ namespace SquidShopWebApp.Controllers
     {
         private readonly IPromotionService _promotionService;
 
-        public PromotionsController(IPromotionService promotionService, IProductService productService)
+        public PromotionsController(IPromotionService promotionService)
         {
             _promotionService = promotionService;
 
@@ -76,17 +76,17 @@ namespace SquidShopWebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     await _promotionService.CreateAsync<Promotion>(promotion);
-                    await _promotionService.SaveChangesAsync();
+                 //   await _promotionService.SaveChangesAsync();
 
-                    var product = await _promotionService.GetByIdAsync<Product>(promotion.ProductId);
+                    var product = await _promotionService.GetProductByIdAsync<Product>(promotion.ProductId);
                     if (product != null)
                     {
                         double discountPrice = product.UnitPrice * (1 - promotion.DiscountProcent / 100);
                         product.DiscountPrice = (decimal)discountPrice;
                         product.Discount = true;
                         product.UnitPrice = discountPrice;
-                        await _promotionService.UpdateAsync<Product>(promotion);
-                        await _promotionService.SaveChangesAsync();
+                        await _promotionService.UpdateProductAsync<ApiResponse>(product);
+                      
 
                     }
                     return RedirectToAction(nameof(Index));
@@ -132,7 +132,7 @@ namespace SquidShopWebApp.Controllers
                     try
                     {
                         await _promotionService.UpdateAsync<Promotion>(promotion);
-                        await _promotionService.SaveChangesAsync();
+                       
                     }
                     catch (DbUpdateConcurrencyException)
                     {
@@ -184,7 +184,7 @@ namespace SquidShopWebApp.Controllers
                 if (promotion != null)
                 {
                     await _promotionService.DeleteAsync<ApiResponse>(promotion);
-                    await _promotionService.SaveChangesAsync();
+                
 
             }
 

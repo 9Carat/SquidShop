@@ -1,4 +1,5 @@
 ﻿using SquidShopWebApp.Models;
+using SquidShopWebApp.Models.DTO;
 using System.Collections;
 using System.Linq.Expressions;
 
@@ -17,7 +18,6 @@ namespace SquidShopWebApp.Services.IServices
 
         Task<List<Product>> GetAllProductsAsync();
         Task<T> GetProductByIdAsync<T>(int id);
-        
-        Task SaveChangesAsync();
+        Task<T> UpdateProductAsync<T>(Product entity);
     }
 }
