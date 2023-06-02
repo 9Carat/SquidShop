@@ -61,16 +61,9 @@ namespace SquidShopWebApp.Controllers
         // GET: Promotions/Create
         public async Task<IActionResult> Create()
         {
-            var promotions = await _promotionService.GetAllAsync<IEnumerable<Promotion>>();
-            if (promotions == null)
-            {
-                return NotFound();
-            }
-            var productIds = promotions.Select(p => p.ProductId).ToList();
-            ViewData["ProductId"] = new SelectList(productIds, "ProductId", "ProductId");
-            {
-                return View();
-            }
+            var products = await _promotionService.GetAllProductsAsync();
+            ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductName");
+            return View();
         }
 
             // POST: Promotions/Create
@@ -99,33 +92,33 @@ namespace SquidShopWebApp.Controllers
                     return RedirectToAction(nameof(Index));
 
                 }
-                var products = await _promotionService.GetAllAsync<IEnumerable<Product>>();
-                ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
-                return View(promotion);
+            var products = await _promotionService.GetAllProductsAsync();
+            ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductName", promotion.ProductId);
+            return View(promotion);
+        }
+
+        // GET: Promotions/Edit/5
+        async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _promotionService == null)
+            {
+                return NotFound();
             }
 
-            //// GET: Promotions/Edit/5
-            //async Task<IActionResult> Edit(int? id)
-            //{
-            //    if (id == null || _promotionService == null)/////jsdnfojsdnåpf
-            //    {
-            //        return NotFound();
-            //    }
+            var promotion = await _promotionService.GetByIdAsync<Product>((int)id);
+            if (promotion == null)
+            {
+                return NotFound();
+            }
+            var products = await _promotionService.GetAllAsync<IEnumerable<Product>>();
+            ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
+            return View(promotion);
+        }
 
-            //    var promotion = await _promotionService.GetByIdAsync<Product>((int)id);
-            //    if (promotion == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    var products = await _promotionService.GetAllAsync<IEnumerable<Product>>();
-            //    ViewData["ProductId"] = new SelectList(products, "ProductId", "ProductId", promotion.ProductId);
-            //    return View(promotion);
-            //}
-
-            // POST: Promotions/Edit/5
-            // To protect from overposting attacks, enable the specific properties you want to bind to.
-            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-            [HttpPost]
+        // POST: Promotions/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
             [ValidateAntiForgeryToken]
             async Task<IActionResult> Edit(int id, [Bind("PromotionId,StartDate,EndDate,DiscountProcent,ProductId")] Promotion promotion)
             {
@@ -167,16 +160,14 @@ namespace SquidShopWebApp.Controllers
                     return NotFound();
                 }
 
-                var promotion = await _promotionService
-                .GetPromotionsIncludingProducts()
-                .FirstOrDefaultAsync(m => m.PromotionId == id);
-                if (promotion == null)
-                {
-                    return NotFound();
-                }
-
-                return View(promotion);
+            var promotion = await _promotionService.GetByIdAsync<Promotion>(id.Value);
+            if (promotion == null)
+            {
+                return NotFound();
             }
+
+            return View(promotion);
+        }
 
             // POST: Promotions/Delete/5
             [HttpPost, ActionName("Delete")]
@@ -193,8 +184,9 @@ namespace SquidShopWebApp.Controllers
                 if (promotion != null)
                 {
                     await _promotionService.DeleteAsync<ApiResponse>(promotion);
+                    await _promotionService.SaveChangesAsync();
 
-                }
+            }
 
                 await _promotionService.GetAllAsync<IEnumerable<Promotion>>(); // Ange typargumentet explicit som IEnumerable<Promotion>
                 return RedirectToAction(nameof(Index));
@@ -202,8 +194,9 @@ namespace SquidShopWebApp.Controllers
 
             bool PromotionExists(int id)
             {
-                return _promotionService.Any(e => ((Promotion)e).PromotionId == id);
-            }
+            var promotion = _promotionService.GetByIdAsync<Promotion>(id).Result;
+            return promotion != null;
+        }
         }
     }
 

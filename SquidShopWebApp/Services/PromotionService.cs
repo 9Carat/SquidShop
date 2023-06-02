@@ -1,16 +1,18 @@
-﻿    using Microsoft.EntityFrameworkCore;
-    using SquidShopWebApp.Data;
-    using SquidShopWebApp.Models;
-    using SquidShopWebApp.Services.IServices;
-    using SquidShopWebApp.Utility;
-    using System.Collections;
-    using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using SquidShopWebApp.Data;
+using SquidShopWebApp.Models;
+using SquidShopWebApp.Services.IServices;
+using SquidShopWebApp.Utility;
+using System.Collections;
+using System.Linq.Expressions;
+   
 
-    namespace SquidShopWebApp.Services
+namespace SquidShopWebApp.Services
     {
         public class PromotionService : BaseService, IPromotionService
         {
-            private readonly DbSet<Promotion> _promotionService;
+            
             private readonly string _promotionUrl;
             private readonly string _productUrl;
             public PromotionService( IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
@@ -20,7 +22,7 @@
                 this._promotionUrl = configuration.GetValue<string>("ServiceUrls:SquidShopApi");
                 this._productUrl = configuration.GetValue<string>("ServiceUrls:SquidShopApi");
             }
-
+        
             public Task<T>CreateAsync<T>(Promotion entity)
             {
                 return SendAsync<T>(apiRequest: new ApiRequest()
@@ -69,38 +71,23 @@
                 });
             }
 
-            bool IPromotionService.Any(Func<object, bool> value)
-            {
-                return GetPromotionsIncludingProducts().Any(value);
-            }
+            //bool IPromotionService.Any(Func<object, bool> value)
+            //{
+            //    return GetPromotionsIncludingProducts().Any(value);
+            //}
 
-            public IQueryable<Promotion> GetPromotionsIncludingProducts()
-            {
-                return _promotionService.Include(p => p.Product);
-            }
 
-            IQueryable<Product> IPromotionService.GetProductsIncludingProducts()
-            {
-                return _promotionService.Include(p => p.Product).Select(p => p.Product);
-            }
 
-            Task<T> IPromotionService.GetAllAsync<T>(Product product)
+        public async Task<T> GetAllProductAsync<T>()
+        {
+            return await SendAsync<T>(apiRequest: new ApiRequest()
             {
-                return SendAsync<T>(apiRequest: new ApiRequest()
-                {
-                    ApiType = SD.ApiType.GET,
-                    ApiUrl = this._productUrl + "/product"
-                });
-            }
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._productUrl + "/product"
+            });
+        }
 
-            Task<T> IPromotionService.GetByIdAsync<T>(int id)
-            {
-                return SendAsync<T>(apiRequest: new ApiRequest()
-                {
-                    ApiType = SD.ApiType.GET,
-                    ApiUrl = this._productUrl + "/product/" + id
-                });
-            }
+     
 
        
 
@@ -108,5 +95,31 @@
         {
           return Task.CompletedTask;
         }
+
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            var response = await SendAsync<ApiResponse>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._productUrl + "/product"
+            });
+
+            if (response != null && response.IsSuccess)
+            {
+                var products = JsonConvert.DeserializeObject<List<Product>>(Convert.ToString(response.Result));
+                return products;
+            }
+
+            return new List<Product>();
+        }
+        public Task<T> GetProductByIdAsync<T>(int id)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._productUrl + "/product/" + id
+            });
+        }
     }
     }
+    

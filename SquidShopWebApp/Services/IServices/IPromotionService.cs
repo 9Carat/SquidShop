@@ -11,12 +11,12 @@ namespace SquidShopWebApp.Services.IServices
         Task<T> CreateAsync<T>(Promotion entity);
         Task<T> DeleteAsync<T>(Promotion entity);
         Task<T> UpdateAsync<T>(Promotion entity);
-        bool Any(Func<object, bool> value);
-        IQueryable<Promotion> GetPromotionsIncludingProducts();
-        IQueryable<Product> GetProductsIncludingProducts();
+      //  bool Any(Func<object, bool> value);
+        //IQueryable<Promotion> GetPromotionsIncludingProducts();
+        //IQueryable<Product> GetProductsIncludingProducts();
 
-        Task<T> GetAllAsync<T>(Product product);
-        Task<T> GetByIdAsync<T>(int id);
+        Task<List<Product>> GetAllProductsAsync();
+        Task<T> GetProductByIdAsync<T>(int id);
         
         Task SaveChangesAsync();
     }
