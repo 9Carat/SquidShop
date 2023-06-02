@@ -4,11 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Products</h1>
+<div class="text-center"><h1>Products</h1></div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@*fixa sen så create bara är för admins*@
+
+    <a asp-action="Create" class="btn btn-dark">Add new product</a>
+
 
 <div class="row">
     @foreach(var item in Model)
