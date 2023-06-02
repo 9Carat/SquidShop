@@ -17,7 +17,12 @@
         <div class="accordation-item border-bottom">
             <h2 class="accordation header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@item.OrderId" aria-expanded="false" aria-controls="flush-@item.OrderId">
-                    <p>@item.CreatedAt</p>
+                    <div class="text-space">
+                        @item.OrderId
+                    </div>
+                    <div class ="text-space">
+                        @item.CreatedAt
+                    </div>
                 </button>
             </h2>
             <div id="flush-@item.OrderId" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">

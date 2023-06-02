@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Products</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -14,27 +14,27 @@
     @foreach(var item in Model)
     {
         <div class="card mx-2 my-2" style="width: 15rem">
-            <p>@item.ProductName</p>
+            <p><strong>@item.ProductName</strong></p>
             <img class="prodImg align-self-center" src="@("~/images/" + item.ImageName)" asp-append-version="true" />
             <div class="card-body">
                 Price: @if (@item.Discount != 0)
                 {
-                    <div><span class="oldPrice">@item.UnitPrice</span> @item.DiscountUnitPrice</div>
+                    <div><span class="oldPrice">@item.UnitPrice.ToString("c")</span> @item.DiscountUnitPrice.ToString("c")</div>
                     <p class="text-success">@(item.Discount * 100)% Off!</p>
                 }
                 else
                 {
-                    @item.UnitPrice
+                    @item.UnitPrice.ToString("c")
                 }
                 <p>In stock: @item.InStock</p>
             </div>
-            <div class="card-footer text-body-secondary">
-                <a asp-action="BuyProduct" asp-route-id="@item.ProductId">Buy</a>
-                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> 
-                <a asp-action="DeleteProduct" asp-route-productId="@item.ProductId">Delete</a>
+            <div class="card-footer text-body-secondary" style="justify-content:space-between">
+                <a asp-action="BuyProduct" asp-route-id="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Add to cart"><i class="bi bi-cart-plus" style="font-size: 20px;color: cornflowerblue;"></i></a>
+                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Update product"><i class="bi bi-pencil-square" style="font-size: 20px;color:lightgreen"></i></a>
+                <a asp-action="Details" asp-route-id="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Details"><i class="bi bi-list-ul" style="font-size: 20px;color:lightpink"></i></a>
+                <a asp-action="DeleteProduct" asp-route-productId="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Delete"><i class="bi bi-trash" style="font-size: 20px; color:red"></i></a>
             </div>
         </div>
     }
 </div>
-@*class="col-md-2 border border-primary rounded mx-2"*@
+
