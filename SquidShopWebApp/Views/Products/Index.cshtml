@@ -28,11 +28,11 @@
                 }
                 <p>In stock: @item.InStock</p>
             </div>
-            <div class="card-footer text-body-secondary" style="justify-content:space-between">
-                <a asp-action="BuyProduct" asp-route-id="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Add to cart"><i class="bi bi-cart-plus" style="font-size: 20px;color: cornflowerblue;"></i></a>
-                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Update product"><i class="bi bi-pencil-square" style="font-size: 20px;color:lightgreen"></i></a>
-                <a asp-action="Details" asp-route-id="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Details"><i class="bi bi-list-ul" style="font-size: 20px;color:lightpink"></i></a>
-                <a asp-action="DeleteProduct" asp-route-productId="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Delete"><i class="bi bi-trash" style="font-size: 20px; color:red"></i></a>
+            <div class="card-footer text-center text-body-secondary">
+                <a class="" asp-action="BuyProduct" asp-route-id="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Add to cart"><i class="bi bi-cart-plus" style="font-size: 20px;color: cornflowerblue; padding-right:10px;"></i></a>
+                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productId="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Update product"><i class="bi bi-pencil-square" style="font-size: 20px;color:lightgreen;padding-right:10px;"></i></a>
+                <a asp-action="Details" asp-route-id="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Details"><i class="bi bi-list-ul" style="font-size: 20px;color:lightpink;padding-right:10px;"></i></a>
+                <a asp-action="DeleteProduct" asp-route-productId="@item.ProductId" data-bs-toggle="tooltip" data-bs-title="Delete"><i class="bi bi-trash" style="font-size: 20px; color:red;padding-right:10px;"></i></a>
             </div>
         </div>
     }

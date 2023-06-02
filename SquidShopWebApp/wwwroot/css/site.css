@@ -35,8 +35,8 @@ body {
     font-style: normal;
     font-weight: 400;
 }
-.navbar .active {
-    background-color: green;
+.active {
+    border-bottom: 2px solid rgba(0, 0, 0);
 }
 * {
     font-family: 'Lobster', cursive;
