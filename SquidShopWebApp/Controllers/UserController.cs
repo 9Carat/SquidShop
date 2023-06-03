@@ -30,26 +30,26 @@ namespace SquidShopWebApp.Controllers
             }
             return View(list);
         }
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserCreateDTO model)
-        {
-            if (ModelState.IsValid)
-            {
-                var userId = await _user.GetUserAsync(User);
-                model.FK_UsersId = userId.Id;
-                var response = await _userService.CreateAsync<ApiResponse>(model);
-                if (response != null && response.IsSuccess)
-                {
-                    return RedirectToAction(nameof(Create));
-                }
-            }
-            return View(model);
-        }
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(UserCreateDTO model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var userId = await _user.GetUserAsync(User);
+        //        model.FK_UsersId = userId.Id;
+        //        var response = await _userService.CreateAsync<ApiResponse>(model);
+        //        if (response != null && response.IsSuccess)
+        //        {
+        //            return RedirectToAction(nameof(Create));
+        //        }
+        //    }
+        //    return View(model);
+        //}
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
