@@ -30,3 +30,47 @@ body {
 .oldPrice {
     text-decoration: line-through;
 }
+.navbar-brand {
+    font-family: 'Indie Flower', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+.active {
+    border-bottom: 2px solid rgba(0, 0, 0);
+}
+* {
+    font-family: 'Lobster', cursive;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+}
+.text-space{
+    padding-right: 50px;
+}
+.background-image {
+    background-image: url("/Images/backgroundhome.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+footer {
+    display: flex;
+}
+.footer-left{
+    padding-left: 10px;
+    text-decoration: none;
+    flex: 50%;
+}
+.footer-right {
+    flex: 50%;
+    float:right;
+    padding-right: 10px;
+}
+.bi-github{
+    color: white;
+}
+.bi-github:hover{
+    color: blue;
+}
+.footer-left-text{
+    color:white;
+}
