@@ -19,22 +19,37 @@ namespace SquidShopWebApp.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly ApplicationDbContext _db;
+        private readonly UserManager<IdentityUser> _user;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public OrdersController(IOrderService orderService, IMapper mapper)
+        public OrdersController(IOrderService orderService, IMapper mapper, ApplicationDbContext db, IUserService userService, UserManager<IdentityUser> user)
         {
             _orderService = orderService;
             _mapper = mapper;
+            _db = db;
+            _userService = userService;
+            _user = user;
         }
         //Get Index
         public async Task<IActionResult> Index()
         {
             List<Order> list = new();
+            List<Order> selectList = new();
             var response = await _orderService.GetAllOrdersAsync<ApiResponse>();
-            if (response != null && response.IsSuccess)
+            var userId = await _user.GetUserAsync(User);
+            if (userId != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<Order>>(Convert.ToString(response.Result));
+                var apiResponse = await _userService.GetByFkIdAsync<ApiResponse>(userId.Id);
+                var user = JsonConvert.DeserializeObject<User>(Convert.ToString(apiResponse.Result));
+
+                if (user != null && apiResponse.IsSuccess)
+                {
+                    list = JsonConvert.DeserializeObject<List<Order>>(Convert.ToString(response.Result));
+                    selectList = list.Where(u=>u.FK_UserId == user.UserId).ToList();
+                }
             }
-            return View(list);
+            return View(selectList);
         }
 
         //Get Create

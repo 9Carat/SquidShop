@@ -7,7 +7,7 @@ namespace SquidShopWebApp.Models
 	{
         public int CategoryId { get; set; }
         [StringLength(25)]
-        [DisplayName("Category")]
+        [DisplayName("Category Name")]
         public string CategoryName { get; set; }
         [StringLength(40)]
         public string Details { get; set; }

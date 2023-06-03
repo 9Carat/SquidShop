@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SquidShopWebApp.Models;
@@ -6,6 +7,7 @@ using SquidShopWebApp.Services.IServices;
 
 namespace SquidShopWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StatisticsController : Controller
     {
         private readonly IOrderService _orderService;
