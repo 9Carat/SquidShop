@@ -208,7 +208,7 @@ namespace SquidShopWebApp.Controllers
             order.FK_UserId = user.UserId;
             order.CreatedAt = DateTime.Now;
             order.OrderStatus = true;
-            order.ShippingAddress = user.Address;
+            order.ShippingAddress = user.Address + ", " + user.City;
             var newOrder = await _orderService.CreateOrderAsync<ApiResponse>(order);
             var orderInfo = JsonConvert.DeserializeObject<Order>(Convert.ToString(newOrder.Result));
                 

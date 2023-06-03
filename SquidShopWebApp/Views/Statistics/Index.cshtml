@@ -28,7 +28,7 @@
                 <td>@Html.DisplayFor(modelItem => item.OrderList.Price)</td>
                 <td>@Html.DisplayFor(modelItem => item.OrderList.Quantity)</td>
                 <td>
-                    <a asp-action="ProductDetails" asp-route-id="@item.Product.ProductId">More info</a>
+                    <a asp-action="ProductDetails" asp-route-id="@item.Product.ProductId" data-bs-toggle="tooltip" data-bs-title="More info"><i class="bi bi-info-circle-fill" style="font-size: 20px;color:cadetblue;padding-right:10px;"></i></a>
                 </td>
             </tr>
         }
