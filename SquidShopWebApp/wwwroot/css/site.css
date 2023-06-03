@@ -65,6 +65,12 @@ footer {
     float:right;
     padding-right: 10px;
 }
+.bi-github{
+    color: white;
+}
+.bi-github:hover{
+    color: blue;
+}
 .footer-left-text{
     color:white;
 }
