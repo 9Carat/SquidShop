@@ -1,0 +1,57 @@
+﻿@model IEnumerable<StatisticsViewModel>
+@{
+    ViewData["Title"] = "Index";
+    int quantity = 0;
+    int productQuantity = 0;
+    double price = 0;
+    double productPrice = 0;
+
+}
+
+<h1>Statistics overview</h1>
+
+<table class="table">
+    <thead>
+    <th>@Html.DisplayNameFor(model => model.Product.ProductName)</th>
+    <th>@Html.DisplayNameFor(model => model.Order.CreatedAt)</th>
+    <th>@Html.DisplayNameFor(model => model.OrderList.Price)</th>
+    <th>@Html.DisplayNameFor(model => model.OrderList.Quantity)</th>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            quantity += item.OrderList.Quantity;
+            price += item.OrderList.Price;
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Product.ProductName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Order.CreatedAt)</td>
+                <td>@Html.DisplayFor(modelItem => item.OrderList.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.OrderList.Quantity)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Price total</th>
+            <th>Quantity total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>@price</td>
+            <td>@quantity</td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back</a>
+    <a asp-action="ProductDetails">Show product overview</a>
+</div>

@@ -1,0 +1,39 @@
+﻿@model SquidShopWebApp.Models.Cart
+@{
+    ViewData["Title"] = "CreateOrder";
+    double price = 0;
+    double discount = 0;
+}
+
+@if(Model.CartItems != null)
+{
+    <div>
+    @foreach (var item in Model.CartItems)
+    {
+        <h6>@item.ProductName</h6>
+        <div>
+            @if (item.Discount != 0)
+            {
+                <p>Price: @(item.DiscountUnitPrice * item.Quantity)</p>
+                price += item.DiscountUnitPrice * item.Quantity;
+                discount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
+            }else
+            {
+                <p>Price: @(item.UnitPrice * item.Quantity)</p>
+                price += item.UnitPrice * item.Quantity;
+            }
+        </div>
+    }
+    </div>
+    <div>
+        <p class="text-danger">Amount Saved: @discount</p>
+        <b>Total: @price</b>
+    </div>
+
+    <form asp-action="CreateOrder" method="post">
+        <input type="submit" value="Place order" class="btn btn-outline-success" />
+    </form>
+    <div>
+        <a asp-action="CartView">Back to Cart</a>
+    </div>
+}
