@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SquidShopWebApp.Models
 {
@@ -6,6 +7,7 @@ namespace SquidShopWebApp.Models
 	{
         public int CategoryId { get; set; }
         [StringLength(25)]
+        [DisplayName("Category Name")]
         public string CategoryName { get; set; }
         [StringLength(40)]
         public string Details { get; set; }

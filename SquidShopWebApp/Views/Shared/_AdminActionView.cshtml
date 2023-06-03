@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+@if (signInManager.IsSignedIn(User))
+{
+    var currentuser = await userManager.GetUserAsync(User);
+    var isAdmin = currentuser != null && await userManager.IsInRoleAsync(currentuser, "Admin");
+
+    if (isAdmin)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+        </li>
+    }
+}

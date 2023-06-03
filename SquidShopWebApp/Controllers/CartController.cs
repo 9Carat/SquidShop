@@ -41,15 +41,34 @@ namespace SquidShopWebApp.Controllers
 
             var userId = await _user.GetUserAsync(User);
 
-            Cart cart = GetCart(userId.Id);
+            Cart cart = await GetCart(userId.Id);
 
-            if (cart.CartItems.Count != 0)
+            if (cart.CartItems != null)
             {
                 CartItem existingCartItem = cart.CartItems.FirstOrDefault(item => item.Fk_ProductId == productId);
                 if (existingCartItem != null)
                 {
                     existingCartItem.Quantity += quantity;
                 }
+                else
+                {
+                    var response = await _productService.GetByIdAsync<ApiResponse>(productId);
+                    Product product = JsonConvert.DeserializeObject<Product>(Convert.ToString(response.Result));
+                    CartItem cartItem = new()
+                    {
+                        Fk_ProductId = productId,
+                        Quantity = quantity,
+                        UnitPrice = product.UnitPrice,
+                        Discount = product.Discount,
+                        DiscountUnitPrice = product.DiscountUnitPrice,
+                        Fk_CartId = cart.CartId,
+                        ProductName = product.ProductName,
+                        ImageName = product.ImageName,
+                    };
+                    await _db.CartItems.AddAsync(cartItem);
+                }
+                await _db.SaveChangesAsync();
+                return RedirectToAction("CartView");
             }
             else
             {
@@ -108,12 +127,12 @@ namespace SquidShopWebApp.Controllers
 
             var userId = await _user.GetUserAsync(User);
 
-            Cart cart = GetCart(userId.Id);
+            Cart cart = await GetCart(userId.Id);
 
             return View(cart);
         }
 
-        private Cart GetCart(string userId)
+        private async Task<Cart> GetCart(string userId)
         {
             Cart cart = _db.Carts.Include(i => i.CartItems).FirstOrDefault(c => c.UserId == userId);
 
@@ -124,7 +143,7 @@ namespace SquidShopWebApp.Controllers
                     UserId = userId,
                 };
                 _db.Carts.Add(cart);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
             return cart;
         }
@@ -165,7 +184,7 @@ namespace SquidShopWebApp.Controllers
         public async Task<IActionResult> CreateOrder()
         {
             var userId = await _user.GetUserAsync(User);
-            Cart cart = GetCart(userId.Id);
+            Cart cart = await GetCart(userId.Id);
             return View(cart);
         }
 
@@ -175,7 +194,7 @@ namespace SquidShopWebApp.Controllers
         public async Task<IActionResult> CreateOrder(int id)
         {
             var userId = await _user.GetUserAsync(User);
-            Cart cart = GetCart(userId.Id);
+            Cart cart = await GetCart(userId.Id);
             //                                                Use when api is updated
             var apiResponse = await _userService.GetByFkIdAsync<ApiResponse>(userId.Id);
             var user = JsonConvert.DeserializeObject<User>(Convert.ToString(apiResponse.Result));
@@ -213,6 +232,10 @@ namespace SquidShopWebApp.Controllers
                     orderList.Price = (double)(item.DiscountUnitPrice * item.Quantity);
                 }
                 product.InStock -= item.Quantity;
+                if(product.InStock < 0)
+                {
+
+                }
                 var productUpdate = _mapper.Map<ProductUpdateDTO>(product);
                 await _orderService.UpdateProductAsync<ApiResponse>(productUpdate);
                 var newOrderList = _mapper.Map<OrderListCreateDTO>(orderList);
