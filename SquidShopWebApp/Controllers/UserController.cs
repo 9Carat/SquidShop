@@ -30,7 +30,7 @@ namespace SquidShopWebApp.Controllers
             }
             return View(list);
         }
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -45,7 +45,7 @@ namespace SquidShopWebApp.Controllers
                 var response = await _userService.CreateAsync<ApiResponse>(model);
                 if (response != null && response.IsSuccess)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Create));
                 }
             }
             return View(model);

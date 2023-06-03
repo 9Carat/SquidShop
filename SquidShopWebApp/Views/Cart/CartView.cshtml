@@ -1,5 +1,8 @@
 ﻿@model SquidShopWebApp.Models.Cart
-
+@{
+    ViewData["Title"] = "CartView";
+    double price = 0;
+}
 @if (Model.CartItems != null)
 {
     @if (Model.CartItems.Count != 0)
@@ -16,12 +19,14 @@
                     <p>Quantity: @item.Quantity</p>
                     <p class="text-success">Discount: @((item.UnitPrice - item.DiscountUnitPrice) * item.Quantity)</p>
                     <p>Total: @(item.DiscountUnitPrice * item.Quantity)</p>
+                        price += item.DiscountUnitPrice * item.Quantity;
                 }
                 else
                 {
                     <p>Price: @item.UnitPrice</p>
                     <p>Quantity: @item.Quantity</p>
                     <p>Total: @(item.UnitPrice * item.Quantity)</p>
+                    price += item.UnitPrice * item.Quantity;
                 }
                 </div>
                 <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
@@ -34,16 +39,19 @@
                     <input class="btn btn-danger" type="submit" value="Remove" />
                 </form>
             </div>
-        <hr />
+            
         }
-    
+        <div>
+        <h6>Total Price</h6>
+        <p>@price</p>
+        <a asp-controller="Cart" asp-action="CreateUser" >Next</a>
+        </div>
     }
     else {
     <div>
         <h4>Your cart is empty</h4>
     </div>
     }
-    
 } 
 else {
 <div>

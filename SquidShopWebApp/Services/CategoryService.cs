@@ -1,5 +1,7 @@
 ﻿using SquidShopWebApp.Models;
+using SquidShopWebApp.Models.DTO;
 using SquidShopWebApp.Services.IServices;
+using SquidShopWebApp.Utility;
 
 namespace SquidShopWebApp.Services
 {
@@ -20,5 +22,14 @@ namespace SquidShopWebApp.Services
 				ApiUrl = this._categoryUrl + "/category"
 			});
 		}
-	}
+        public Task<T> CreateAsync<T>(Category dto)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = dto,
+                ApiUrl = this._categoryUrl + "/category"
+            });
+        }
+    }
 }

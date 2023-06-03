@@ -49,6 +49,14 @@ namespace SquidShopWebApp.Services
                 ApiUrl = this._userUrl + "/user/" + id
             });
         }
+        public Task<T> GetByFkIdAsync<T>(string id)
+        {
+            return SendAsync<T>(apiRequest: new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = this._userUrl + "/user/" + id
+            });
+        }
 
         public Task<T> UpdateAsync<T>(UserUpdateDTO dto)
         {

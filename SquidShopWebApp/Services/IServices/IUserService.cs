@@ -6,6 +6,7 @@ namespace SquidShopWebApp.Services.IServices
     {
         Task<T> GetAllAsync<T>();
         Task<T> GetByIdAsync<T>(int id);
+        Task<T> GetByFkIdAsync<T>(string id);
         Task<T> CreateAsync<T>(UserCreateDTO dto);
         Task<T> UpdateAsync<T>(UserUpdateDTO dto);
         Task<T> DeleteAsync<T>(int id);
