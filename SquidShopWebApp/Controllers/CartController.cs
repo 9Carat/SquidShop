@@ -50,6 +50,25 @@ namespace SquidShopWebApp.Controllers
                 {
                     existingCartItem.Quantity += quantity;
                 }
+                else
+                {
+                    var response = await _productService.GetByIdAsync<ApiResponse>(productId);
+                    Product product = JsonConvert.DeserializeObject<Product>(Convert.ToString(response.Result));
+                    CartItem cartItem = new()
+                    {
+                        Fk_ProductId = productId,
+                        Quantity = quantity,
+                        UnitPrice = product.UnitPrice,
+                        Discount = product.Discount,
+                        DiscountUnitPrice = product.DiscountUnitPrice,
+                        Fk_CartId = cart.CartId,
+                        ProductName = product.ProductName,
+                        ImageName = product.ImageName,
+                    };
+                    await _db.CartItems.AddAsync(cartItem);
+                }
+                await _db.SaveChangesAsync();
+                return RedirectToAction("CartView");
             }
             else
             {
@@ -189,7 +208,7 @@ namespace SquidShopWebApp.Controllers
             order.FK_UserId = user.UserId;
             order.CreatedAt = DateTime.Now;
             order.OrderStatus = true;
-            order.ShippingAddress = user.Address;
+            order.ShippingAddress = user.Address + ", " + user.City;
             var newOrder = await _orderService.CreateOrderAsync<ApiResponse>(order);
             var orderInfo = JsonConvert.DeserializeObject<Order>(Convert.ToString(newOrder.Result));
                 

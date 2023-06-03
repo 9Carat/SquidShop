@@ -112,16 +112,26 @@ namespace SquidShopWebApp.Controllers
             }
 
             // Matchar orderList och product med order
-            var orderlist = orderListList.Where(o => o.Fk_OrderId == id).FirstOrDefault();
-            var productId = orderlist.FK_ProductId;
-            var product = productList.Where(p => p.ProductId == productId).FirstOrDefault();
+            var orderlist = orderListList.Where(o => o.Fk_OrderId == id).ToList();
+            //List<int> productId = new();
+            //foreach(var order in orderlist)
+            //{
+            //    productId.Add(order.FK_ProductId);
+            //}
+            //var productId = orderlist.FK_ProductId;
+
+            var products = (from ol in orderlist
+                            join p in productList on ol.FK_ProductId equals p.ProductId
+                            select p).ToList();
+
+            //var product = productList.Where(p => p.ProductId == ).FirstOrDefault();
 
 
             //Anropar API för uträkning av distans
             var ApiResponse = new DistanceApi();
             var result = await ApiResponse.Get(orderInfo.ShippingAddress);
 
-            var viewModel = new OrderViewModel() { Order = orderInfo, Product = product, OrderList = orderlist, ApiResponse = result };
+            var viewModel = new OrderViewModel() { Order = orderInfo, Product = products, OrderList = orderlist, ApiResponse = result };
 
             return View(viewModel);
         }

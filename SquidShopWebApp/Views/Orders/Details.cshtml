@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Details";
+    int quantity = 0;
+    double price = 0;
 }
 
 <h1>Details</h1>
@@ -10,12 +12,12 @@
     <h4>Order</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+@*        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Order.OrderStatus)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Order.OrderStatus)
-        </dd>
+        </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Order.CreatedAt)
         </dt>
@@ -35,22 +37,33 @@
             @Html.DisplayFor(model => model.Order.FK_UserId)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ProductName)
+            Products
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductName)
+        @foreach (var product in Model.Product)
+        {
+           @product.ProductName <br>
+        }
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OrderList.Quantity)
+            Total Quantity
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OrderList.Quantity)
+        @foreach (var order in Model.OrderList)
+        {
+            quantity += @order.Quantity;
+        }
+            @quantity <br />
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OrderList.Price)
+            Total Price
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OrderList.Price)
+            @foreach (var order in Model.OrderList)
+            {
+                price += @order.Price;
+            }
+            @price <br />
         </dd>
         <dt class="col-sm-2">
             Distance
