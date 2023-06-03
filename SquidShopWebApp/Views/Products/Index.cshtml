@@ -19,7 +19,7 @@
 <div class="row">
     @foreach(var item in Model)
     {
-        <div class="card mx-2 my-2" style="width: 15rem">
+        <div class="card mx-2 my-2 prodcard" style="width: 15rem">
             <p><strong>@item.ProductName</strong></p>
             <img class="prodImg align-self-center" src="@("~/images/" + item.ImageName)" asp-append-version="true" />
             <div class="card-body">

@@ -18,13 +18,15 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #ececec;
 }
 
 .prodImg {
     width: 175px;
     height: 200px;
-    
+    border: 0px;
+    border-radius: 5px;
 }
 
 .oldPrice {
@@ -73,4 +75,23 @@ footer {
 }
 .footer-left-text{
     color:white;
+}
+
+.home h1 {
+    font-size: 120px;
+    text-shadow: 2px 2px #eee;
+}
+
+.home p {
+    font-size: 30px;
+}
+
+.prodcard {
+    border: 0px;
+    border-radius: 20px;
+}
+
+.card-footer {
+    border: 0px;
+    border-radius: 5px;
 }
