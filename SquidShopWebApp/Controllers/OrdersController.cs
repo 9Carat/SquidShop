@@ -67,7 +67,7 @@ namespace SquidShopWebApp.Controllers
                 orderList.Fk_OrderId = orderInfo.OrderId;
                 orderList.FK_ProductId = product.ProductId;
                 orderList.Quantity = (int)viewModel.Quantity;
-                if (product.Discount == 0)
+                if (product.Discount == false)
                 {
                     orderList.Price = product.UnitPrice * (int)viewModel.Quantity;
                 }

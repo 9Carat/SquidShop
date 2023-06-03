@@ -10,6 +10,8 @@ namespace SquidShopWebApp.Data
 			: base(options)
 		{
 		}
+		public DbSet<SquidShopWebApp.Models.Promotion> Promotion { get; set; }
+        
         //public DbSet<Product> Products { get; set; }
         //public DbSet<Order> Orders { get; set; }
         //public DbSet<OrderList> OrderLists { get; set; }
