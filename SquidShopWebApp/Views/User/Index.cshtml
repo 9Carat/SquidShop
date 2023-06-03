@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SquidShopWebApp.Models.User>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<div class="container p-4 border">
+    <div>
+        <a asp-controller="User" asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i></a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Address)</th>
+                <th>
+                    @Html.DisplayNameFor(model=> model.FirstName)
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Address</td>
+                    <td>
+                        @item.FirstName
+                        @item.LastName
+                        @item.UserId
+                        @item.PostalCode
+                        @item.City
+                    </td>
+                
+                <td>
+                        <a asp-controller="User" asp-action="Update" asp-route-userId="@item.UserId">Edit</a>
+                   </td>
+                         @*<a asp-controller="User" asp-action="Delete" asp-route-interestId="@item.UserId" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></a>
+                    *@
+              </tr>  
+            }
+
+        </tbody>
+    </table>
+</div>

@@ -12,7 +12,7 @@ namespace SquidShopWebApp.Models
         public DateTime CreatedAt { get; set; }
         [StringLength(50)]
         public string ShippingAddress { get; set; }
-        public Customer Customer { get; set; }
+        public User Customer { get; set; }
         public ICollection<OrderList> OrderLists { get; set; }
     }
 }

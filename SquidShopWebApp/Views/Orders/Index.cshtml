@@ -17,6 +17,10 @@
             <p>@item.OrderStatus</p>
             <p>@item.CreatedAt</p>
             <p>@item.ShippingAddress</p>
+            @foreach (var i in item.OrderLists)
+            {
+                <p>Prod Id: @i.FK_ProductId Quantity: @i.Quantity</p>   
+            }
             <div>
                 <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a>
                 <a asp-action="Details" asp-route-id="@item.OrderId">Details</a>
