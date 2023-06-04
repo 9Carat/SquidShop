@@ -1,39 +1,65 @@
-﻿@model SquidShopWebApp.Models.Cart
-@{
-    ViewData["Title"] = "CreateOrder";
-    double price = 0;
-    double discount = 0;
-}
-
-@if(Model.CartItems != null)
-{
-    <div>
-    @foreach (var item in Model.CartItems)
-    {
-        <h6>@item.ProductName</h6>
-        <div>
-            @if (item.Discount != 0)
-            {
-                <p>Price: @(item.DiscountUnitPrice * item.Quantity)</p>
-                price += item.DiscountUnitPrice * item.Quantity;
-                discount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
-            }else
-            {
-                <p>Price: @(item.UnitPrice * item.Quantity)</p>
-                price += item.UnitPrice * item.Quantity;
-            }
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main class="page payment-page">
+    <section class="payment-form dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2>Payment</h2>
+          <p>Did you know that there are more than 300 species of squid</p>
         </div>
-    }
-    </div>
-    <div>
-        <p class="text-danger">Amount Saved: @discount</p>
-        <b>Total: @price</b>
-    </div>
+        
+        @if (Model.CartItems != null)
+        {
+            
+                double price = 0;
+                double discount = 0;
+            
 
-    <form asp-action="CreateOrder" method="post">
-        <input type="submit" value="Place order" class="btn btn-outline-success" />
-    </form>
-    <div>
-        <a asp-action="CartView">Back to Cart</a>
-    </div>
-}
+            <form asp-action="CreateOrder" method="post">
+                <div class="products">
+                    <h3 class="title">Checkout</h3>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <div class="item">
+                            @if (item.Discount != 0)
+                            {
+                                double itemPrice = item.DiscountUnitPrice * item.Quantity;
+                                price += itemPrice;
+                                discount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
+
+                                <span class="price">@itemPrice kr</span>
+                                <p class="item-name">@item.ProductName</p>
+                                <p class="item-description">Lorem ipsum dolor sit amet</p>
+                            }
+                            else
+                            {
+                                double itemPrice = item.UnitPrice * item.Quantity;
+                                price += itemPrice;
+
+                                <span class="price">@itemPrice kr</span>
+                                <p class="item-name">@item.ProductName</p>
+                            }
+                        </div>
+                            }
+                    </form>
+                    <div class="total">Total<span class="price">@price Kr</span></div>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block" formaction="CreateOrder">Place Order</button>
+                    </div>
+                } 
+      </div>
+    </section>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
