@@ -29,11 +29,13 @@
         <p class="text-danger">Amount Saved: @discount</p>
         <b>Total: @price</b>
     </div>
-
-    <form asp-action="CreateOrder" method="post">
-        <input type="submit" value="Place order" class="btn btn-outline-success" />
-    </form>
+    <br/>
     <div>
-        <a asp-action="CartView">Back to Cart</a>
+        <a class="btn btn-info" asp-action="CartView">Back to Cart</a>
     </div>
+    <br/>
+    <form asp-action="CreateOrder" method="post">
+        <input type="submit" value="Place order" class="btn btn-success" />
+    </form>
+    
 }
