@@ -87,6 +87,7 @@
                        </div>
                      </div>
                     }
+                 <a type="button" class="btn btn-primary" asp-controller="Products" asp-action="Index">Back to products</a>
                 }          
                  else
                  {
@@ -121,7 +122,7 @@
                  <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
                  <div class="summary-item"><span class="text">Total</span><span class="price">@totalPrice.ToString("C")</span></div>       
                }
-              <button type="button" class="btn btn-primary btn-lg btn-block" asp-controller="Cart" asp-action="CreateUser">Checkout</button>
+              <a type="button" class="btn btn-primary btn-lg btn-block" asp-controller="Cart" asp-action="CreateUser">Checkout</a>
                 </div>
              </div>
           </div>
