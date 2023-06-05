@@ -8,5 +8,6 @@ namespace SquidShopWebApp.Models
         public List<OrderList> OrderList { get; set; }
         public List<Product> Product { get; set; }
         public string ApiResponse { get; set; }
+        public User User { get; set; }
     }
 }

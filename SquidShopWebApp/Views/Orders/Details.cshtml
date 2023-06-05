@@ -34,7 +34,8 @@
             @Html.DisplayNameFor(model => model.Order.Customer)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Order.FK_UserId)
+            @Html.DisplayFor(model => model.User.FirstName) 
+            @Html.DisplayFor(model => model.User.LastName)
         </dd>
         <dt class="col-sm-2">
             Products
