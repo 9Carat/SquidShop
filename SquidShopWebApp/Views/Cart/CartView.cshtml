@@ -1,15 +1,10 @@
 ﻿@model SquidShopWebApp.Models.Cart
+@{
+    double price = 0;
+    double discount = 0;
+    double total = 0;
+}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Shopping Cart</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
 <body>
     <main class="page">
         <section class="shopping-cart dark">
@@ -29,7 +24,7 @@
                                 <div class="product">
                                 <div class="row">
                                 <div class="col-md-3">
-                                 <img class="img-fluid mx-auto d-block image" src="~/images/@item.ImageName" alt="@item.ProductName">
+                                 <img class="prodImg img-fluid d-block image m-3" src="~/images/@item.ImageName" alt="@item.ProductName">
                                 </div>
                                 <div class="col-md-8">
                                 <div class="info">
@@ -58,13 +53,13 @@
                                 <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
                                 <input type="hidden" name="cartItemId" value="@item.CartItemId" />
                                 <input id="quantity" type="number" class="form-control quantity-input" name="quantity" value="@item.Quantity">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary m-1" data-bs-toggle="tooltip" data-bs-title="Update quantity">
                                 <i class="bi bi-plus-square-dotted"></i>
                                 </button>
                                     </form>
                                      <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
                                      <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-                                     <button type="submit" class="btn btn-secondary">
+                                     <button type="submit" class="btn btn-secondary m-1" data-bs-toggle="tooltip" data-bs-title="Remove from cart">
                                      <i class="bi bi-trash"></i>
                                      </button>
                                     </form>
@@ -85,12 +80,12 @@
                        </div>
                      </div>
                     }
-                 <a type="button" class="btn btn-primary" asp-controller="Products" asp-action="Index">Back to products</a>
+                 
                 }          
                  else
                  {
                  <div>
-                   <h4>Your cart is empty</h4>
+                   <h4 class="m-2">Your cart is empty</h4>
                 </div>
                  }
                </div>
@@ -99,29 +94,33 @@
          <div class="summary">
          <h3>Summary</h3>
         @{
-         double totalPrice = 0;
-         double totalDiscount = 0;             
           @if (Model.CartItems != null && Model.CartItems.Count != 0)
            {
-                foreach (var item in Model.CartItems)
+                @foreach (var item in Model.CartItems)
                 {
-                   if (item.Discount != 0)
-                   {
-                    totalDiscount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
-                    totalPrice += item.DiscountUnitPrice * item.Quantity;
-                   }
-                   else
-                   {
-                         totalPrice += (item.UnitPrice * (1 - (double)item.Discount)) * item.Quantity;
-                   }
+                    <h6>@item.ProductName</h6>
+                    <div>
+                        @if (item.Discount != 0)
+                        {
+                            <p>Price: @(item.DiscountUnitPrice * item.Quantity)</p>
+                            price += item.DiscountUnitPrice * item.Quantity;
+                            discount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
+                        }else
+                        {
+                            <p>Price: @(item.UnitPrice * item.Quantity)</p>
+                            price += item.UnitPrice * item.Quantity;
+                        }
+                    </div>
+                }
                  }
-                  
-                 }
-                 <div class="summary-item"><span class="text">Total Discount</span><span class="price">@totalDiscount.ToString("C")</span></div>
+                 {total = price + discount;}
+                 <div class="summary-item"><span class="text">Subtotal</span><span class="price">@total.ToString("C")</span></div>
+                 <div class="summary-item"><span class="text">Total Discount</span><span class="price">@discount.ToString("C")</span></div>
                  <div class="summary-item"><span class="text">Shipping</span><span class="price">0 Kr</span></div>
-                 <div class="summary-item"><span class="text">Total</span><span class="price">@totalPrice.ToString("C")</span></div>       
+                 <div class="summary-item"><span class="text">Total</span><span class="price">@price.ToString("C")</span></div>       
                }
               <a type="button" class="btn btn-primary btn-lg btn-block" asp-controller="Cart" asp-action="CreateUser">Checkout</a>
+              <a type="button" class="btn btn-secondary btn-lg btn-block" asp-controller="Products" asp-action="Index">Back to products</a>
                 </div>
              </div>
           </div>
@@ -132,4 +131,3 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-</html>

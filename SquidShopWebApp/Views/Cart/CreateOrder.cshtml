@@ -1,13 +1,4 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-  <title>Payment</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
+﻿
 <body>
   <main class="page payment-page">
     <section class="payment-form dark">
@@ -19,11 +10,8 @@
         
         @if (Model.CartItems != null)
         {
-            
-                double price = 0;
-                double discount = 0;
-            
-
+            double price = 0;
+            double discount = 0;
             <form asp-action="CreateOrder" method="post">
                 <div class="products">
                     <h3 class="title">Checkout</h3>
@@ -38,7 +26,6 @@
 
                                 <span class="price">@itemPrice kr</span>
                                 <p class="item-name">@item.ProductName</p>
-                                <p class="item-description">Lorem ipsum dolor sit amet</p>
                             }
                             else
                             {
@@ -53,7 +40,7 @@
                     </form>
                     <div class="total">Total<span class="price">@price Kr</span></div>
                     <div>
-                        <button type="submit" class="btn btn-primary btn-block" formaction="CreateOrder">Place Order</button>
+                        <button type="submit" class="btn btn-primary btn-block m-4" formaction="CreateOrder">Place Order</button>
                     </div>
                 } 
       </div>
@@ -62,4 +49,3 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
-</html>
