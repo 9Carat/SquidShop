@@ -1,62 +1,133 @@
 ﻿@model SquidShopWebApp.Models.Cart
 @{
-    ViewData["Title"] = "CartView";
     double price = 0;
+    double discount = 0;
+    double total = 0;
 }
-@if (Model.CartItems != null)
-{
-    @if (Model.CartItems.Count != 0)
-    {
-        @foreach (var item in Model.CartItems)
-        {
-            <div class="card mx-2 my-2" style="width: 8rem">
-                <h4>@item.ProductName</h4>
-                <img src="@("~/images/" + item.ImageName)" asp-append-version="true" />
-                <div>
-                @if (item.Discount != 0)
-                {
-                    <p>Price: @item.DiscountUnitPrice</p>
-                    <p>Quantity: @item.Quantity</p>
-                    <p class="text-success">Discount: @((item.UnitPrice - item.DiscountUnitPrice) * item.Quantity)</p>
-                    <p>Total: @(item.DiscountUnitPrice * item.Quantity)</p>
-                        price += item.DiscountUnitPrice * item.Quantity;
-                }
-                else
-                {
-                    <p>Price: @item.UnitPrice</p>
-                    <p>Quantity: @item.Quantity</p>
-                    <p>Total: @(item.UnitPrice * item.Quantity)</p>
-                    price += item.UnitPrice * item.Quantity;
-                }
+
+<body>
+    <main class="page">
+        <section class="shopping-cart dark">
+            <div class="container">
+                <div class="block-heading">
+                  <h2>Shopping Cart</h2>
+                    <p>Did you know that Squids Came About In The Jurassic Era</p>
                 </div>
-                <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
-                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-                    <input class="input-group-text" style="width: 8rem" type="number" name="quantity" value="@item.Quantity" />
-                    <input class="btn btn-primary" type="submit" value="Update" />
-                </form>
-                <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
-                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-                    <input class="btn btn-danger" type="submit" value="Remove" />
-                </form>
+                <div class="content">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-8">
+                            <div class="items">
+                                @if (Model.CartItems != null && Model.CartItems.Count != 0)
+                                {
+                                @foreach (var item in Model.CartItems)
+                                {
+                                <div class="product">
+                                <div class="row">
+                                <div class="col-md-3">
+                                 <img class="prodImg img-fluid d-block image m-3" src="~/images/@item.ImageName" alt="@item.ProductName">
+                                </div>
+                                <div class="col-md-8">
+                                <div class="info">
+                                <div class="row">
+                                <div class="col-md-5 product-name">
+                                <div class="product-name">
+                                <a>@item.ProductName</a>
+                                <div class="product-info">
+                                 @if (item.Discount != 0)
+                                  {
+                                <div>Price: <span class="value">@item.DiscountUnitPrice.ToString("C")</span></div>
+                                <div>Quantity: <span class="value">@item.Quantity</span></div>
+                                   <p class="text-success">Discount: @((item.UnitPrice - item.DiscountUnitPrice) * item.Quantity) kr</p>
+                                   <p>Total: @(item.DiscountUnitPrice  * item.Quantity) kr</p>
+                                      }
+                                      else
+                                      {
+                                        <p>Price: @item.UnitPrice.ToString("C")</p>
+                                        <p>Quantity: @item.Quantity</p>
+                                      }
+                                       </div>
+                                    </div>
+                                  </div>
+                               <div class="col-md-4 quantity">
+                                <label for="quantity">Quantity:</label>
+                                <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
+                                <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                <input id="quantity" type="number" class="form-control quantity-input" name="quantity" value="@item.Quantity">
+                                <button type="submit" class="btn btn-primary m-1" data-bs-toggle="tooltip" data-bs-title="Update quantity">
+                                <i class="bi bi-plus-square-dotted"></i>
+                                </button>
+                                    </form>
+                                     <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                                     <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                     <button type="submit" class="btn btn-secondary m-1" data-bs-toggle="tooltip" data-bs-title="Remove from cart">
+                                     <i class="bi bi-trash"></i>
+                                     </button>
+                                    </form>
+                               </div>
+                                 <div class="col-md-3 price">
+                                   @if (item.Discount != 0)
+                                   {
+                                    <span>@item.DiscountUnitPrice.ToString("C")</span>
+                                   }
+                                   else
+                                   {
+                                     <span>@item.UnitPrice.ToString("C")</span>
+                                   }
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                       </div>
+                     </div>
+                    }
+                 
+                }          
+                 else
+                 {
+                 <div>
+                   <h4 class="m-2">Your cart is empty</h4>
+                </div>
+                 }
+               </div>
             </div>
-            
-        }
-        <div>
-        <h6>Total Price</h6>
-        <p>@price</p>
-        <a class="btn btn-info" asp-controller="Products" asp-action="Index">Back</a>
-        
-        <a class="btn btn-success" asp-controller="Cart" asp-action="CreateUser">Next</a>
+        <div class="col-md-12 col-lg-4">
+         <div class="summary">
+         <h3>Summary</h3>
+        @{
+          @if (Model.CartItems != null && Model.CartItems.Count != 0)
+           {
+                @foreach (var item in Model.CartItems)
+                {
+                    <h6>@item.ProductName</h6>
+                    <div>
+                        @if (item.Discount != 0)
+                        {
+                            <p>Price: @(item.DiscountUnitPrice * item.Quantity)</p>
+                            price += item.DiscountUnitPrice * item.Quantity;
+                            discount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
+                        }else
+                        {
+                            <p>Price: @(item.UnitPrice * item.Quantity)</p>
+                            price += item.UnitPrice * item.Quantity;
+                        }
+                    </div>
+                }
+                 }
+                 {total = price + discount;}
+                 <div class="summary-item"><span class="text">Subtotal</span><span class="price">@total.ToString("C")</span></div>
+                 <div class="summary-item"><span class="text">Total Discount</span><span class="price">@discount.ToString("C")</span></div>
+                 <div class="summary-item"><span class="text">Shipping</span><span class="price">0 Kr</span></div>
+                 <div class="summary-item"><span class="text">Total</span><span class="price">@price.ToString("C")</span></div>       
+               }
+              <a type="button" class="btn btn-primary btn-lg btn-block" asp-controller="Cart" asp-action="CreateUser">Checkout</a>
+              <a type="button" class="btn btn-secondary btn-lg btn-block" asp-controller="Products" asp-action="Index">Back to products</a>
+                </div>
+             </div>
+          </div>
         </div>
-    }
-    else {
-    <div>
-        <h4>Your cart is empty</h4>
-    </div>
-    }
-} 
-else {
-<div>
-    <h4>Your cart is empty</h4>
-</div>
-}
+      </div>
+</section>
+</main>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
