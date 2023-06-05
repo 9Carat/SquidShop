@@ -244,7 +244,12 @@ namespace SquidShopWebApp.Controllers
                 _db.CartItems.Remove(item);
                 await _db.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(CartView)); //View(cart);
+            return RedirectToAction(nameof(OrderComplete)); //View(cart);
+        }
+
+        public IActionResult OrderComplete()
+        {
+            return View();
         }
     }
 }

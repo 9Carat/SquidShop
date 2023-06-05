@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Azure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -38,7 +39,16 @@ namespace SquidShopWebApp.Controllers
             List<Order> selectList = new();
             var response = await _orderService.GetAllOrdersAsync<ApiResponse>();
             var userId = await _user.GetUserAsync(User);
-            if (userId != null && response.IsSuccess)
+            if (User.IsInRole("Admin"))
+            {
+                if (response != null && response.IsSuccess)
+                {
+                    list = JsonConvert.DeserializeObject<List<Order>>(Convert.ToString(response.Result));
+                }
+                return View(list);
+            }
+
+            else if (userId != null && response.IsSuccess)
             {
                 var apiResponse = await _userService.GetByFkIdAsync<ApiResponse>(userId.Id);
                 var user = JsonConvert.DeserializeObject<User>(Convert.ToString(apiResponse.Result));
@@ -112,6 +122,10 @@ namespace SquidShopWebApp.Controllers
                 return NotFound();
             }
 
+            var userResponse = await _userService.GetAllAsync<ApiResponse>();
+            List<User> userList = JsonConvert.DeserializeObject<List<User>>(Convert.ToString(userResponse.Result));
+            var user = userList.Where(u => u.UserId == orderInfo.FK_UserId).FirstOrDefault();
+
             // Hämtar orderList och product
             List<OrderList> orderListList = new();
             var orderListResponse = await _orderService.GetAllOrderListsAsync<ApiResponse>();
@@ -146,7 +160,7 @@ namespace SquidShopWebApp.Controllers
             var ApiResponse = new DistanceApi();
             var result = await ApiResponse.Get(orderInfo.ShippingAddress);
 
-            var viewModel = new OrderViewModel() { Order = orderInfo, Product = products, OrderList = orderlist, ApiResponse = result };
+            var viewModel = new OrderViewModel() { Order = orderInfo, Product = products, OrderList = orderlist, ApiResponse = result, User = user };
 
             return View(viewModel);
         }
