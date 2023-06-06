@@ -24,7 +24,7 @@
                                 price += itemPrice;
                                 discount += (item.UnitPrice - item.DiscountUnitPrice) * item.Quantity;
 
-                                <span class="price">@itemPrice kr</span>
+                                <span class="price">@itemPrice.ToString("c")</span>
                                 <p class="item-name">@item.ProductName</p>
                             }
                             else
@@ -32,13 +32,13 @@
                                 double itemPrice = item.UnitPrice * item.Quantity;
                                 price += itemPrice;
 
-                                <span class="price">@itemPrice kr</span>
+                                <span class="price">@itemPrice.ToString("c")</span>
                                 <p class="item-name">@item.ProductName</p>
                             }
                         </div>
                             }
                     </form>
-                    <div class="total">Total<span class="price">@price Kr</span></div>
+                    <div class="total">Total<span class="price">@price.ToString("c")</span></div>
                     <div>
                         <button type="submit" class="btn btn-primary btn-block m-4" formaction="CreateOrder">Place Order</button>
                     </div>

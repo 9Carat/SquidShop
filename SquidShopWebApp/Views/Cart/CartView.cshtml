@@ -35,14 +35,14 @@
                                 <div class="product-info">
                                  @if (item.Discount != 0)
                                   {
-                                <div>Price: <span class="value">@item.DiscountUnitPrice.ToString("C")</span></div>
+                                <div>Price: <span class="value">@item.DiscountUnitPrice.ToString("c")</span></div>
                                 <div>Quantity: <span class="value">@item.Quantity</span></div>
-                                   <p class="text-success">Discount: @((item.UnitPrice - item.DiscountUnitPrice) * item.Quantity) kr</p>
-                                   <p>Total: @(item.DiscountUnitPrice  * item.Quantity) kr</p>
+                                   <p class="text-success">Discount: $@((item.UnitPrice - item.DiscountUnitPrice) * item.Quantity)</p>
+                                   <p>Total: $@(item.DiscountUnitPrice  * item.Quantity)</p>
                                       }
                                       else
                                       {
-                                        <p>Price: @item.UnitPrice.ToString("C")</p>
+                                        <p>Price: @item.UnitPrice.ToString("c")</p>
                                         <p>Quantity: @item.Quantity</p>
                                       }
                                        </div>
@@ -67,11 +67,11 @@
                                  <div class="col-md-3 price">
                                    @if (item.Discount != 0)
                                    {
-                                    <span>@item.DiscountUnitPrice.ToString("C")</span>
+                                    <span>@item.DiscountUnitPrice.ToString("c")</span>
                                    }
                                    else
                                    {
-                                     <span>@item.UnitPrice.ToString("C")</span>
+                                     <span>@item.UnitPrice.ToString("c")</span>
                                    }
                                 </div>
                               </div>
@@ -116,7 +116,7 @@
                  {total = price + discount;}
                  <div class="summary-item"><span class="text">Subtotal</span><span class="price">@total.ToString("C")</span></div>
                  <div class="summary-item"><span class="text">Total Discount</span><span class="price">@discount.ToString("C")</span></div>
-                 <div class="summary-item"><span class="text">Shipping</span><span class="price">0 Kr</span></div>
+                 <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
                  <div class="summary-item"><span class="text">Total</span><span class="price">@price.ToString("C")</span></div>       
                }
                <div class="checkout m-2">
