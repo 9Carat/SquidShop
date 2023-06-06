@@ -269,6 +269,13 @@ font-size: 0.9em;
 
 }
 
+.checkout{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 
 
 
