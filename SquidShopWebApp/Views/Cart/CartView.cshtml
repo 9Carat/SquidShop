@@ -119,8 +119,10 @@
                  <div class="summary-item"><span class="text">Shipping</span><span class="price">0 Kr</span></div>
                  <div class="summary-item"><span class="text">Total</span><span class="price">@price.ToString("C")</span></div>       
                }
-              <a type="button" class="btn btn-primary btn-lg btn-block" asp-controller="Cart" asp-action="CreateUser">Checkout</a>
-              <a type="button" class="btn btn-secondary btn-lg btn-block" asp-controller="Products" asp-action="Index">Back to products</a>
+               <div class="checkout m-2">
+                  <a type="button" class="btn btn-primary btn-lg btn-block m-2" asp-controller="Cart" asp-action="CreateUser">Checkout</a>
+                  <a type="button" class="btn btn-secondary btn-lg btn-block m-2" asp-controller="Products" asp-action="Index">Back to products</a>
+               </div>
                 </div>
              </div>
           </div>
