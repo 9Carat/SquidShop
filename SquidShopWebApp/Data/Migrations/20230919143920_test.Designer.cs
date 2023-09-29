@@ -12,8 +12,8 @@ using SquidShopWebApp.Data;
 namespace SquidShopWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230514103354_ImgNameChange")]
-    partial class ImgNameChange
+    [Migration("20230919143920_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,10 +89,6 @@ namespace SquidShopWebApp.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -144,10 +140,6 @@ namespace SquidShopWebApp.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -235,103 +227,42 @@ namespace SquidShopWebApp.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SquidShopWebApp.Models.Category", b =>
+            modelBuilder.Entity("SquidShopWebApp.Models.Cart", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CartId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
 
-                    b.Property<string>("Details")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                    b.HasKey("CartId");
 
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("Categories");
+                    b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("SquidShopWebApp.Models.Order", b =>
+            modelBuilder.Entity("SquidShopWebApp.Models.CartItem", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("CartItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
 
-                    b.Property<string>("FK_UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OrderStatus")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("ShippingAddress")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex("FK_UserId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.OrderList", b =>
-                {
-                    b.Property<int>("OrderListId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderListId"));
-
-                    b.Property<int>("FK_ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Fk_OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
+                    b.Property<double>("DiscountUnitPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("Fk_CartId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderListId");
-
-                    b.HasIndex("FK_ProductId");
-
-                    b.HasIndex("Fk_OrderId");
-
-                    b.ToTable("OrderLists");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.Product", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
-
-                    b.Property<bool>("Discount")
-                        .HasColumnType("bit");
-
-                    b.Property<double?>("DiscountPrice")
-                        .HasColumnType("float");
-
-                    b.Property<int>("FK_CategoryId")
+                    b.Property<int>("Fk_ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageName")
@@ -339,27 +270,21 @@ namespace SquidShopWebApp.Data.Migrations
                         .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("ProductName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
-                    b.Property<int>("Stock")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<double>("UnitPrice")
                         .HasColumnType("float");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("CartItemId");
 
-                    b.HasIndex("FK_CategoryId");
+                    b.HasIndex("Fk_CartId");
 
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.User", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.HasDiscriminator().HasValue("User");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -413,63 +338,20 @@ namespace SquidShopWebApp.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SquidShopWebApp.Models.Order", b =>
+            modelBuilder.Entity("SquidShopWebApp.Models.CartItem", b =>
                 {
-                    b.HasOne("SquidShopWebApp.Models.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("FK_UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.OrderList", b =>
-                {
-                    b.HasOne("SquidShopWebApp.Models.Product", "Product")
-                        .WithMany("OrderLists")
-                        .HasForeignKey("FK_ProductId")
+                    b.HasOne("SquidShopWebApp.Models.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("Fk_CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SquidShopWebApp.Models.Order", "Order")
-                        .WithMany("OrderLists")
-                        .HasForeignKey("Fk_OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                    b.Navigation("Cart");
                 });
 
-            modelBuilder.Entity("SquidShopWebApp.Models.Product", b =>
+            modelBuilder.Entity("SquidShopWebApp.Models.Cart", b =>
                 {
-                    b.HasOne("SquidShopWebApp.Models.Category", "Categories")
-                        .WithMany("Products")
-                        .HasForeignKey("FK_CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categories");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.Order", b =>
-                {
-                    b.Navigation("OrderLists");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.Product", b =>
-                {
-                    b.Navigation("OrderLists");
-                });
-
-            modelBuilder.Entity("SquidShopWebApp.Models.User", b =>
-                {
-                    b.Navigation("Orders");
+                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

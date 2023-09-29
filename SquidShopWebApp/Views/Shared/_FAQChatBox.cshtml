@@ -1,0 +1,53 @@
+﻿<div id="faq-chat-box" class="faq-chat-box rounded">
+    <div class="faq-chat-header">
+        <div class="pic bot"></div>
+        <div class="name">FAQ Chat</div>
+        </div>
+    <div class="messages" id="faq-chat-messages">
+        <!-- Chat messages will be displayed here -->
+    </div>
+    <div class="faq-chat-input">
+        <input class="rounded" type="text" id="user-message" placeholder="Type your message..."> 
+        <button class="rounded" id="send-button">Send</button>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        function displayMessage(userMessage, answer) {
+            var messageHtml = '<div class="message user">' + userMessage + '</div>';
+            var answerHtml = '<div class="message">' + answer + '</div>';
+            $('#faq-chat-messages').append(messageHtml);
+            $('#faq-chat-messages').append(answerHtml);
+        }
+
+        $('#send-button').click(function () {
+            var userMessage = $('#user-message').val();
+            var ans = "";
+            if (userMessage.trim() === "") {
+                return; // Ignore empty messages
+            }
+           
+            $.ajax({
+                type: 'POST',
+                url: '/QnA/GetAnswer', 
+                data: JSON.stringify( userMessage),
+                contentType: 'application/json',
+                success: async function (data) {
+
+                    displayMessage(userMessage, data.answer);
+                },
+                error: function () {
+                    displayMessage(userMessage, "An error occurred while fetching the answer.");
+                    console.error('An error occurred while fetching the answer.');
+                }
+            });
+            $('#user-message').val("");
+        });
+    });
+</script>
+
